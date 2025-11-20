@@ -11,6 +11,9 @@ const definition: OAS3Definition = {
     {
       url: "http://localhost:3000/WebServicesSite",
     },
+    {
+      url: "https://wqk4w3fs-3001.use2.devtunnels.ms/WebServices",
+    }
   ],
   components: {
     securitySchemes: {
