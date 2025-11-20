@@ -18,9 +18,10 @@ const definition: OAS3Definition = {
   components: {
     securitySchemes: {
       "x-access-token": {
-        type: "http",
-        scheme: "bearer",
-        bearerFormat: "JWT",
+        type: "apiKey",
+        in: "header",
+        name: "x-access-token",
+        description: "Token de autenticación JWT. Se debe obtener mediante el endpoint /auth/login. Ingrese el token completo sin comillas ni espacios adicionales.",
       },
     },
     schemas: {

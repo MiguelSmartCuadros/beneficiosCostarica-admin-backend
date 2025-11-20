@@ -13,7 +13,24 @@ import bcrypt from "bcrypt";
 
         if (!username || !password || !id_user_role) {
         logger.error("username, password e id_user_role son requeridos | status: 400");
-        return res.status(400).json({ error: "username, password e id_user_role son requeridos" });
+        const responseError: ErrorI = {
+            error: true,
+            message: "username, password e id_user_role son requeridos",
+            statusCode: 400,
+        };
+        return res.status(400).json(responseError);
+        }
+
+        // Verificar si el username ya existe
+        const existingUser = await Users.findOne({ where: { username } });
+        if (existingUser) {
+            logger.error(`El username ${username} ya existe | status: 409`);
+            const responseError: ErrorI = {
+                error: true,
+                message: `El username ${username} ya está en uso. Por favor, elige otro username.`,
+                statusCode: 409,
+            };
+            return res.status(409).json(responseError);
         }
 
         // Hashear la contraseña del nuevo usuario
@@ -24,6 +41,7 @@ import bcrypt from "bcrypt";
         username,
         password: hashedPassword,
         id_user_role,
+        enabled: 1,
         });
 
         const userData: UsersAttributes = user.get();
@@ -43,6 +61,27 @@ import bcrypt from "bcrypt";
 
         return res.header("x-access-token", token).status(201).json(userData);
     } catch (error: any) {
+        // Manejar errores de validación de Sequelize
+        if (error.name === "SequelizeUniqueConstraintError") {
+            logger.error(`El username ya existe | status: 409`);
+            const responseError: ErrorI = {
+                error: true,
+                message: `El username ya está en uso. Por favor, elige otro username.`,
+                statusCode: 409,
+            };
+            throw responseError;
+        }
+        
+        if (error.name === "SequelizeValidationError" || error.name === "SequelizeForeignKeyConstraintError") {
+            logger.error(`Error de validación: ${error.message} | status: 400`);
+            const responseError: ErrorI = {
+                error: true,
+                message: error.message || "Error de validación. Verifica que el id_user_role sea válido y que todos los campos requeridos estén presentes.",
+                statusCode: 400,
+            };
+            throw responseError;
+        }
+
         const responseError: ErrorI = {
         error: true,
         message: error.message || `Error al crear usuario: ${error}`,

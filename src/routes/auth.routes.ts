@@ -16,7 +16,7 @@ const authRouter: Router = Router();
  *     tags: [Autenticacion]
  *     summary: Verificar token de un usuario
  *     security:
- *     - x-access-token: []
+ *       - x-access-token: []
  *     responses:
  *       200:
  *         description: Token válido
@@ -195,7 +195,7 @@ authRouter.post("/login", loginController);
  *                   id_user_role:
  *                       type: integer
  *     responses:
- *       200:
+ *       201:
  *         description: Usuario registrado con éxito
  *         headers:
  *             x-access-token:
@@ -208,7 +208,7 @@ authRouter.post("/login", loginController);
  *                 type: object
  *                 $ref: '#/components/schemas/users'
  *       400:
- *         description: Datos de entrada inválidos o inexistentes
+ *         description: Datos de entrada inválidos o inexistentes, o error de validación (id_user_role inválido)
  *         content:
  *           application/json:
  *             schema:
@@ -239,8 +239,24 @@ authRouter.post("/login", loginController);
  *                      statusCode:
  *                          type: number
  *                          description: Código de error
+ *       409:
+ *         description: El username ya está en uso
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      error:
+ *                          type: boolean
+ *                          description: Booleano que indica que hubo un error
+ *                      message:
+ *                          type: string
+ *                          description: Mensaje indicando que el username ya está en uso
+ *                      statusCode:
+ *                          type: number
+ *                          description: Código de error (409)
  *       500:
- *         description: Error interno
+ *         description: Error interno del servidor
  *         content:
  *           application/json:
  *             schema:
