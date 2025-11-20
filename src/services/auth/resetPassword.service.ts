@@ -55,6 +55,7 @@ export const resetPasswordService: (req: Request, res: Response) => Promise<Resp
             return res.status(404).json(responseError);
         }
 
+        // Hashear y actualizar la nueva contraseña
         const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS || 10);
         const hashedPassword = await bcrypt.hash(new_password, saltRounds);
 
@@ -63,7 +64,14 @@ export const resetPasswordService: (req: Request, res: Response) => Promise<Resp
             { where: { id_user: payload.id_user } }
         );
 
-        return res.status(200).json({ reset: true });
+        // Generar nuevo token de inicio de sesión con la nueva contraseña
+        const sign_token_options: jwt.SignOptions = {
+            expiresIn: process.env.TIME_TOKEN,
+        };
+
+        return res.status(200).json({
+            message: "Contraseña restablecida exitosamente"
+        });
     } catch (error: any) {
         const responseError: ErrorI = {
             error: true,

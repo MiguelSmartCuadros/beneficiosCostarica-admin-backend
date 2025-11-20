@@ -5,7 +5,17 @@ import { forgotPasswordService } from "../../services/auth/forgotPassword.servic
 
 export const forgotPasswordController: Handler = async (req: Request, res: Response) => {
     try {
-        await forgotPasswordService(req, res);
+        const username = req.body?.username;
+
+        if (!username) {
+            return res.status(400).json({
+                error: true,
+                message: "El campo username es requerido para solicitar recuperación.",
+                statusCode: 400,
+            });
+        }
+
+        return await forgotPasswordService(req, res);
     } catch (error: ErrorI | any) {
         errorResponse(error, res);
     }

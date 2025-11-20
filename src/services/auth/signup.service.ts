@@ -5,6 +5,7 @@ import { Model } from "sequelize";
 import { UsersAttributes, UsersCreationAttributes } from "../../interfaces/users.interface";
 import { logger } from "../../logger/logger";
 import { ErrorI } from "../../interfaces/error.interface";
+import bcrypt from "bcrypt";
 
     export const signupService: (req: Request, res: Response) => Promise<Response> = async (req: Request, res: Response) => {
     try {
@@ -15,9 +16,13 @@ import { ErrorI } from "../../interfaces/error.interface";
         return res.status(400).json({ error: "username, password e id_user_role son requeridos" });
         }
 
+        // Hashear la contraseña del nuevo usuario
+        const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS || 10);
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
         const user: Model<UsersAttributes, UsersCreationAttributes> = await Users.create({
         username,
-        password,
+        password: hashedPassword,
         id_user_role,
         });
 
@@ -47,3 +52,5 @@ import { ErrorI } from "../../interfaces/error.interface";
         throw responseError;
     }
     };
+
+    

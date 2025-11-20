@@ -13,7 +13,7 @@ export const loginService: (req: Request, res: Response) => Promise<Response> = 
   try {
     const username: string = req.body.username ? req.body.username.toString() : "";
     const password: string = req.body.password ? req.body.password.toString() : "";
-
+    
     if (!username || !password) {
       logger.error("Username y password son requeridos | status: 403");
       return res.status(403).json({ login: false, error: "Username y password son requeridos" });
@@ -24,7 +24,7 @@ export const loginService: (req: Request, res: Response) => Promise<Response> = 
         username,
       },
     });
-
+    
     if (!user) {
       logger.error("Usuario no encontrado | status: 404");
       const responseError: ErrorI = {
@@ -86,7 +86,7 @@ export const loginService: (req: Request, res: Response) => Promise<Response> = 
       process.env.WORD_SECRET,
       sign_token_options
     );
-
+    
     return res
       .header({
         "Access-Control-Expose-Headers": "x-access-token",

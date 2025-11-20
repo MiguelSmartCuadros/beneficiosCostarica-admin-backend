@@ -17,7 +17,7 @@ const paramsDataBase: dataBaseConfig = {
     DB_NAME: process.env.DB_NAME as string,
     USER_NAME: process.env.USER_NAME as string,
     PASSWORD: process.env.PASSWORD as string,
-    DB_ENDPOINT: process.env.PASSWORD as string,
+    DB_ENDPOINT: process.env.DB_ENDPOINT as string,
     DB_DIALE: "mysql",
     DB_PORT: Number(process.env.DB_PORT),
 };

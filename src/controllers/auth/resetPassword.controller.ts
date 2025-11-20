@@ -5,6 +5,17 @@ import { resetPasswordService } from "../../services/auth/resetPassword.service"
 
 export const resetPasswordController: Handler = async (req: Request, res: Response) => {
     try {
+        const token = req.body?.token;
+        const new_password = req.body?.new_password;
+
+        if (!token || !new_password) {
+            return res.status(400).json({
+                error: true,
+                message: "Los campos token y new_password son requeridos para resetear la contraseña.",
+                statusCode: 400,
+            });
+        }
+
         await resetPasswordService(req, res);
     } catch (error: ErrorI | any) {
         errorResponse(error, res);

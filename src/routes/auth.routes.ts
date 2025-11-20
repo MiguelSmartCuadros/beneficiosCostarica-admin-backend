@@ -266,69 +266,84 @@ authRouter.post("/signup", verify_JWT, isAdmin, signupController);
  * /auth/forgot-password:
  *   post:
  *     tags: [Autenticacion]
- *     summary: Solicitar recuperación de contraseña
- *     description: Genera un token temporal para restablecer la contraseña del usuario.
+ *     summary: Solicitar recuperación de contraseña
+ *     description: Recibe el username del usuario, genera un token de reseteo de contraseña y envía las instrucciones al correo registrado.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *               type: object
+ *               required:
+ *                 - username
  *               properties:
- *                   username:
- *                       type: string
+ *                 username:
+ *                   type: string
+ *                   description: Username del usuario que solicita recuperación
+ *               example:
+ *                 username: "admin"
  *     responses:
  *       200:
- *         description: Solicitud procesada con éxito
+ *         description: Solicitud procesada correctamente
  *         content:
  *           application/json:
  *             schema:
- *                 type: object
- *                 properties:
- *                      requested:
- *                          type: boolean
- *                      reset_token:
- *                          type: string
- *                          description: Token temporal para restablecer la contraseña
+ *               type: object
+ *               properties:
+ *                 requested:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *               example:
+ *                 requested: true
+ *                 message: "Se ha enviado un correo electrónico con las instrucciones para restablecer tu contraseña"
  *       400:
- *         description: Datos de entrada inválidos o inexistentes
+ *         description: Datos de entrada inválidos o inexistentes
  *         content:
  *           application/json:
  *             schema:
- *                 type: object
- *                 properties:
- *                      error:
- *                          type: boolean
- *                      message:
- *                          type: string
- *                      statusCode:
- *                          type: number
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 statusCode:
+ *                   type: number
  *       404:
  *         description: Usuario no encontrado
  *         content:
  *           application/json:
  *             schema:
- *                 type: object
- *                 properties:
- *                      error:
- *                          type: boolean
- *                      message:
- *                          type: string
- *                      statusCode:
- *                          type: number
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 statusCode:
+ *                   type: number
+ *               example:
+ *                 error: true
+ *                 message: "Usuario no encontrado"
+ *                 statusCode: 404
  *       500:
  *         description: Error interno
  *         content:
  *           application/json:
  *             schema:
- *                 type: object
- *                 properties:
- *                      error:
- *                          type: boolean
- *                      message:
- *                          type: string
- *                      statusCode:
- *                          type: number
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 statusCode:
+ *                   type: number
+ *               example:
+ *                 error: true
+ *                 message: "Error al procesar la solicitud"
+ *                 statusCode: 500
  */
 authRouter.post("/forgot-password", forgotPasswordController);
 
@@ -337,40 +352,103 @@ authRouter.post("/forgot-password", forgotPasswordController);
  * /auth/reset-password:
  *   post:
  *     tags: [Autenticacion]
- *     summary: Confirmar reseteo de contraseña
- *     description: Valida el token de reseteo y actualiza la contraseña.
+ *     summary: Resetear contraseña
+ *     description: Utiliza el token enviado por email junto con la nueva contraseña. Devuelve un nuevo token JWT listo para iniciar sesión.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *               type: object
+ *               required:
+ *                 - token
+ *                 - new_password
  *               properties:
- *                   token:
- *                       type: string
- *                   new_password:
- *                       type: string
+ *                 token:
+ *                   type: string
+ *                   description: Token de recuperación recibido por email
+ *                 new_password:
+ *                   type: string
+ *                   description: Nueva contraseña
+ *               example:
+ *                 token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *                 new_password: "NuevaPassword123"
  *     responses:
  *       200:
- *         description: Contraseña restablecida con éxito
+ *         description: Contraseña restablecida exitosamente
+ *         headers:
+ *           x-access-token:
+ *             description: Token de autenticación de usuario (JWT)
+ *             schema:
+ *               type: string
  *         content:
  *           application/json:
  *             schema:
- *                 type: object
- *                 properties:
- *                      reset:
- *                          type: boolean
+ *               type: object
+ *               properties:
+ *                 reset:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 user_role:
+ *                   type: string
+ *               example:
+ *                 reset: true
+ *                 message: "Contraseña restablecida exitosamente"
+ *                 user_role: "admin"
  *       400:
- *         description: Datos de entrada inválidos o inexistentes
+ *         description: Datos de entrada inválidos o inexistentes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 statusCode:
+ *                   type: number
  *       401:
  *         description: Token inválido o expirado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 statusCode:
+ *                   type: number
  *       404:
- *         description: Usuario no encontrado
+ *         description: Usuario o rol no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 statusCode:
+ *                   type: number
  *       500:
  *         description: Error interno
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 statusCode:
+ *                   type: number
  */
 authRouter.post("/reset-password", resetPasswordController);
-
-
 
 export { authRouter };

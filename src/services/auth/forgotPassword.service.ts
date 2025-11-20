@@ -5,6 +5,7 @@ import { UsersAttributes, UsersCreationAttributes } from "../../interfaces/users
 import jwt from "jsonwebtoken";
 import { logger } from "../../logger/logger";
 import { ErrorI } from "../../interfaces/error.interface";
+import { sendPasswordResetEmail } from "../../mail/sender";
 
 export const forgotPasswordService: (req: Request, res: Response) => Promise<Response> = async (req: Request, res: Response) => {
     try {
@@ -47,7 +48,23 @@ export const forgotPasswordService: (req: Request, res: Response) => Promise<Res
             sign_token_options
         );
 
-        return res.status(200).json({ requested: true, reset_token });
+        // Enviar email con el token de recuperación y código de verificación
+        if (!process.env.EMAIL) {
+            throw new Error("La variable de entorno EMAIL no esta definida");
+        }
+
+        await sendPasswordResetEmail(
+            process.env.EMAIL,
+            reset_token,
+            user.getDataValue("username"),
+        );
+
+        logger.info(`Solicitud de recuperación de contraseña enviada para usuario: ${username}`);
+
+        return res.status(200).json({ 
+            requested: true, 
+            message: "Se ha enviado un correo electrónico con las instrucciones para restablecer tu contraseña" 
+        });
     } catch (error: any) {
         const responseError: ErrorI = {
             error: true,
