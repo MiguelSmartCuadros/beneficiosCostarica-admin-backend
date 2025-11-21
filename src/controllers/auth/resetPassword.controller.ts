@@ -9,9 +9,8 @@ export const resetPasswordController: Handler = async (req: Request, res: Respon
         const email = req.body?.email;
         const usernameOrEmail = req.body?.usernameOrEmail;
         const new_password = req.body?.new_password;
-        const token = req.body?.token;
 
-        if ((!username && !email && !usernameOrEmail) || !new_password || !token) {
+        if ((!username && !email && !usernameOrEmail) || !new_password) {
             return res.status(400).json({
                 error: true,
                 message: "Los campos username (o email), new_password y token son requeridos para resetear la contraseña.",

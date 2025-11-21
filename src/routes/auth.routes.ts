@@ -6,6 +6,7 @@ import { verifyTokenController } from "../controllers/auth/verifyToken.controlle
 import { isAdmin } from "../middlewares/isAdmin";
 import { forgotPasswordController } from "../controllers/auth/forgotPassword.controller";
 import { resetPasswordController } from "../controllers/auth/resetPassword.controller";
+import { validateResetToken } from "../middlewares/validateResetToken";
 
 const authRouter: Router = Router();
 
@@ -483,6 +484,6 @@ authRouter.post("/forgot-password", forgotPasswordController);
  *                 statusCode:
  *                   type: number
  */
-authRouter.post("/reset-password", resetPasswordController);
+authRouter.post("/reset-password", validateResetToken, resetPasswordController);
 
 export { authRouter };

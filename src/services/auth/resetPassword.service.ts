@@ -3,7 +3,7 @@ import { Users } from "../../models/Users";
 import { UserProfile } from "../../models/UserProfile";
 import { Model } from "sequelize";
 import { UsersAttributes, UsersCreationAttributes } from "../../interfaces/users.interface";
-import jwt from "jsonwebtoken";
+
 import bcrypt from "bcrypt";
 import { logger } from "../../logger/logger";
 import { ErrorI } from "../../interfaces/error.interface";
@@ -12,38 +12,15 @@ export const resetPasswordService: (req: Request, res: Response) => Promise<Resp
     try {
         const usernameOrEmail: string = req.body.usernameOrEmail ? req.body.usernameOrEmail.toString() : (req.body.username ? req.body.username.toString() : (req.body.email ? req.body.email.toString() : ""));
         const new_password: string = req.body.new_password ? req.body.new_password.toString() : "";
-        const token: string = req.body.token ? req.body.token.toString() : "";
+        // Token is now validated in middleware
+        // const token: string = req.body.token ? req.body.token.toString() : "";
 
-        if (!usernameOrEmail || !new_password || !token) {
-            logger.error("username (o email), new_password y token son requeridos | status: 400");
-            return res.status(400).json({ error: "username (o email), new_password y token son requeridos" });
+        if (!usernameOrEmail || !new_password) {
+            logger.error("username (o email) y new_password son requeridos | status: 400");
+            return res.status(400).json({ error: "username (o email) y new_password son requeridos" });
         }
 
-        if (!process.env.WORD_SECRET) {
-            throw new Error("La variable de entorno WORD_SECRET no esta definida");
-        }
-
-        // Validar token
-        let payload: any;
-        try {
-            payload = jwt.verify(token, process.env.WORD_SECRET);
-        } catch (err: any) {
-            const responseError: ErrorI = {
-                error: true,
-                message: "Token inválido o expirado",
-                statusCode: 401,
-            };
-            return res.status(401).json(responseError);
-        }
-
-        if (payload?.purpose !== "password_reset" || !payload?.id_user) {
-            const responseError: ErrorI = {
-                error: true,
-                message: "Token de reseteo inválido",
-                statusCode: 401,
-            };
-            return res.status(401).json(responseError);
-        }
+        const payload = res.locals.resetTokenPayload;
 
         let user: Model<UsersAttributes, UsersCreationAttributes> | null = null;
 
