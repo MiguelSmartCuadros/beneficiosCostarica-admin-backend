@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Users } from "../../models/Users";
-import { UserProfile } from "../../models/UserProfile";
 import { Model } from "sequelize";
 import { UsersAttributes, UsersCreationAttributes } from "../../interfaces/users.interface";
 import bcrypt from "bcrypt";
@@ -12,40 +11,19 @@ import { UserRoles } from "../../models/UserRoles";
 
 export const loginService: (req: Request, res: Response) => Promise<Response> = async (req: Request, res: Response) => {
   try {
-    const usernameOrEmail: string = req.body.username ? req.body.username.toString() : "";
+    const username: string = req.body.username ? req.body.username.toString() : "";
     const password: string = req.body.password ? req.body.password.toString() : "";
 
-    if (!usernameOrEmail || !password) {
-      logger.error("Username/Email y password son requeridos | status: 403");
-      return res.status(403).json({ login: false, error: "Username/Email y password son requeridos" });
+    if (!username || !password) {
+      logger.error("Username y password son requeridos | status: 403");
+      return res.status(403).json({ login: false, error: "Username y password son requeridos" });
     }
 
-    let user: Model<UsersAttributes, UsersCreationAttributes> | null = null;
-
-    // Check if input is email
-    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(usernameOrEmail);
-
-    if (isEmail) {
-      // Find user by email via UserProfile
-      const userProfile = await UserProfile.findOne({
-        where: { email: usernameOrEmail },
-        include: [{
-          model: Users,
-          required: true
-        }]
-      });
-
-      if (userProfile) {
-        user = userProfile.getDataValue('user') as Model<UsersAttributes, UsersCreationAttributes>;
-      }
-    } else {
-      // Find user by username
-      user = await Users.findOne({
-        where: {
-          username: usernameOrEmail,
-        },
-      });
-    }
+    const user: Model<UsersAttributes, UsersCreationAttributes> | null = await Users.findOne({
+      where: {
+        username,
+      },
+    });
 
     if (!user) {
       logger.error("Usuario no encontrado | status: 404");
@@ -115,7 +93,7 @@ export const loginService: (req: Request, res: Response) => Promise<Response> = 
         "x-access-token": token,
       })
       .status(200)
-      .json({ login: true, user_role: user.getDataValue("id_user_role") }); // Returning id_user_role as requested
+      .json({ login: true, user_role: user_role.getDataValue("role") });
   } catch (error: any) {
     const responseError: ErrorI = {
       error: true,

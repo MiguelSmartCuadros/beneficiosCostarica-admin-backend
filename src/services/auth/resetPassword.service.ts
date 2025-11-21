@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Users } from "../../models/Users";
+import { UserProfile } from "../../models/UserProfile";
 import { Model } from "sequelize";
 import { UsersAttributes, UsersCreationAttributes } from "../../interfaces/users.interface";
 import jwt from "jsonwebtoken";
@@ -9,18 +10,20 @@ import { ErrorI } from "../../interfaces/error.interface";
 
 export const resetPasswordService: (req: Request, res: Response) => Promise<Response> = async (req: Request, res: Response) => {
     try {
-        const token: string = req.body.token ? req.body.token.toString() : "";
+        const usernameOrEmail: string = req.body.usernameOrEmail ? req.body.usernameOrEmail.toString() : (req.body.username ? req.body.username.toString() : (req.body.email ? req.body.email.toString() : ""));
         const new_password: string = req.body.new_password ? req.body.new_password.toString() : "";
+        const token: string = req.body.token ? req.body.token.toString() : "";
 
-        if (!token || !new_password) {
-            logger.error("token y new_password son requeridos | status: 400");
-            return res.status(400).json({ error: "token y new_password son requeridos" });
+        if (!usernameOrEmail || !new_password || !token) {
+            logger.error("username (o email), new_password y token son requeridos | status: 400");
+            return res.status(400).json({ error: "username (o email), new_password y token son requeridos" });
         }
 
         if (!process.env.WORD_SECRET) {
             throw new Error("La variable de entorno WORD_SECRET no esta definida");
         }
 
+        // Validar token
         let payload: any;
         try {
             payload = jwt.verify(token, process.env.WORD_SECRET);
@@ -33,7 +36,7 @@ export const resetPasswordService: (req: Request, res: Response) => Promise<Resp
             return res.status(401).json(responseError);
         }
 
-        if (payload?.purpose !== "password_reset" || !payload?.id_user || !payload?.username) {
+        if (payload?.purpose !== "password_reset" || !payload?.id_user) {
             const responseError: ErrorI = {
                 error: true,
                 message: "Token de reseteo inválido",
@@ -42,9 +45,30 @@ export const resetPasswordService: (req: Request, res: Response) => Promise<Resp
             return res.status(401).json(responseError);
         }
 
-        const user: Model<UsersAttributes, UsersCreationAttributes> | null = await Users.findOne({
-            where: { id_user: payload.id_user, username: payload.username },
-        });
+        let user: Model<UsersAttributes, UsersCreationAttributes> | null = null;
+
+        // Check if input is email
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(usernameOrEmail);
+
+        if (isEmail) {
+            // Find user by email via UserProfile
+            const userProfile = await UserProfile.findOne({
+                where: { email: usernameOrEmail },
+                include: [{
+                    model: Users,
+                    required: true
+                }]
+            });
+
+            if (userProfile) {
+                user = userProfile.getDataValue('user') as Model<UsersAttributes, UsersCreationAttributes>;
+            }
+        } else {
+            // Find user by username
+            user = await Users.findOne({
+                where: { username: usernameOrEmail },
+            });
+        }
 
         if (!user) {
             const responseError: ErrorI = {
@@ -55,19 +79,25 @@ export const resetPasswordService: (req: Request, res: Response) => Promise<Resp
             return res.status(404).json(responseError);
         }
 
+        // Validar que el usuario del token coincida con el usuario encontrado
+        if (user.getDataValue("id_user") !== payload.id_user) {
+            logger.error(`Intento de cambio de contraseña no autorizado. Token UserID: ${payload.id_user}, Request UserID: ${user.getDataValue("id_user")} | status: 403`);
+            const responseError: ErrorI = {
+                error: true,
+                message: "No tienes permiso para restablecer la contraseña de este usuario.",
+                statusCode: 403,
+            };
+            return res.status(403).json(responseError);
+        }
+
         // Hashear y actualizar la nueva contraseña
         const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS || 10);
         const hashedPassword = await bcrypt.hash(new_password, saltRounds);
 
         await Users.update(
             { password: hashedPassword },
-            { where: { id_user: payload.id_user } }
+            { where: { id_user: user.getDataValue("id_user") } }
         );
-
-        // Generar nuevo token de inicio de sesión con la nueva contraseña
-        const sign_token_options: jwt.SignOptions = {
-            expiresIn: process.env.TIME_TOKEN,
-        };
 
         return res.status(200).json({
             message: "Contraseña restablecida exitosamente"

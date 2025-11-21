@@ -194,6 +194,14 @@ authRouter.post("/login", loginController);
  *                       type: string
  *                   id_user_role:
  *                       type: integer
+ *                   email:
+ *                       type: string
+ *                   nombre_completo:
+ *                       type: string
+ *                   tipo_documento:
+ *                       type: integer
+ *                   numero_doc:
+ *                       type: string
  *     responses:
  *       201:
  *         description: Usuario registrado con éxito
@@ -380,6 +388,15 @@ authRouter.post("/forgot-password", forgotPasswordController);
  *                 - token
  *                 - new_password
  *               properties:
+ *                 usernameOrEmail:
+ *                   type: string
+ *                   description: Username o Email del usuario (opcional si se envía username o email por separado)
+ *                 username:
+ *                   type: string
+ *                   description: Username del usuario
+ *                 email:
+ *                   type: string
+ *                   description: Email del usuario
  *                 token:
  *                   type: string
  *                   description: Token de recuperación recibido por email
@@ -387,6 +404,7 @@ authRouter.post("/forgot-password", forgotPasswordController);
  *                   type: string
  *                   description: Nueva contraseña
  *               example:
+ *                 usernameOrEmail: "usuario@example.com"
  *                 token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *                 new_password: "NuevaPassword123"
  *     responses:

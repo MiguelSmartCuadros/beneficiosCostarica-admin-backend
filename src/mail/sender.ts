@@ -77,7 +77,8 @@ export const sendPasswordResetEmail = async (
     const htmlContent: string = await readFile(templatePath, "utf-8");
 
     // Generar el enlace de reseteo
-    const resetLink = `${process.env.URL_DOMAIN_SMARTFIT || "http://localhost:3000"}/reset-password?token=${resetToken}`;
+    // Generar el enlace de reseteo
+    const resetLink = `${process.env.URL_DOMAIN_SMARTFIT || "http://localhost:3000"}/reset-password/${resetToken}`;
 
     // Reemplazar las variables en el template usando Handlebars
     const stringHtmlToSend: string = handlerTemplate(htmlContent, {
