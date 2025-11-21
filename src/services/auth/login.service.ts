@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Users } from "../../models/Users";
+import { UserProfile } from "../../models/UserProfile";
 import { Model } from "sequelize";
 import { UsersAttributes, UsersCreationAttributes } from "../../interfaces/users.interface";
 import bcrypt from "bcrypt";
@@ -11,20 +12,41 @@ import { UserRoles } from "../../models/UserRoles";
 
 export const loginService: (req: Request, res: Response) => Promise<Response> = async (req: Request, res: Response) => {
   try {
-    const username: string = req.body.username ? req.body.username.toString() : "";
+    const usernameOrEmail: string = req.body.username ? req.body.username.toString() : "";
     const password: string = req.body.password ? req.body.password.toString() : "";
-    
-    if (!username || !password) {
-      logger.error("Username y password son requeridos | status: 403");
-      return res.status(403).json({ login: false, error: "Username y password son requeridos" });
+
+    if (!usernameOrEmail || !password) {
+      logger.error("Username/Email y password son requeridos | status: 403");
+      return res.status(403).json({ login: false, error: "Username/Email y password son requeridos" });
     }
 
-    const user: Model<UsersAttributes, UsersCreationAttributes> | null = await Users.findOne({
-      where: {
-        username,
-      },
-    });
-    
+    let user: Model<UsersAttributes, UsersCreationAttributes> | null = null;
+
+    // Check if input is email
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(usernameOrEmail);
+
+    if (isEmail) {
+      // Find user by email via UserProfile
+      const userProfile = await UserProfile.findOne({
+        where: { email: usernameOrEmail },
+        include: [{
+          model: Users,
+          required: true
+        }]
+      });
+
+      if (userProfile) {
+        user = userProfile.getDataValue('user') as Model<UsersAttributes, UsersCreationAttributes>;
+      }
+    } else {
+      // Find user by username
+      user = await Users.findOne({
+        where: {
+          username: usernameOrEmail,
+        },
+      });
+    }
+
     if (!user) {
       logger.error("Usuario no encontrado | status: 404");
       const responseError: ErrorI = {
@@ -86,14 +108,14 @@ export const loginService: (req: Request, res: Response) => Promise<Response> = 
       process.env.WORD_SECRET,
       sign_token_options
     );
-    
+
     return res
       .header({
         "Access-Control-Expose-Headers": "x-access-token",
         "x-access-token": token,
       })
       .status(200)
-      .json({ login: true, user_role: user_role.getDataValue("role") });
+      .json({ login: true, user_role: user.getDataValue("id_user_role") }); // Returning id_user_role as requested
   } catch (error: any) {
     const responseError: ErrorI = {
       error: true,
