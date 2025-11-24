@@ -10,15 +10,8 @@ import { ErrorI } from "../../interfaces/error.interface";
 
 export const resetPasswordService: (req: Request, res: Response) => Promise<Response> = async (req: Request, res: Response) => {
     try {
-        const usernameOrEmail: string = req.body.usernameOrEmail ? req.body.usernameOrEmail.toString() : (req.body.username ? req.body.username.toString() : (req.body.email ? req.body.email.toString() : ""));
+        const usernameOrEmail: string = req.body.username ? req.body.username.toString() : (req.body.email ? req.body.email.toString() : "");
         const new_password: string = req.body.new_password ? req.body.new_password.toString() : "";
-        // Token is now validated in middleware
-        // const token: string = req.body.token ? req.body.token.toString() : "";
-
-        if (!usernameOrEmail || !new_password) {
-            logger.error("username (o email) y new_password son requeridos | status: 400");
-            return res.status(400).json({ error: "username (o email) y new_password son requeridos" });
-        }
 
         const payload = res.locals.resetTokenPayload;
 

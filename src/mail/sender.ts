@@ -7,7 +7,7 @@ import { ErrorI } from "../interfaces/error.interface";
 import { sendMessageWebSocket } from "../websocket/websocket_server";
 import path from "path";
 
-const { EMAIL, USER_EMAIL } = process.env;
+const { EMAIL } = process.env;
 
 export const sendEmail: (destinatario: string, replacements: any, websocket_id?: string | undefined) => Promise<boolean | ErrorI> = async (
   destinatario: string,
@@ -89,7 +89,7 @@ export const sendPasswordResetEmail = async (
 
     const mailOptions: SendMailOptions = {
       from: `"Beneficios Costa Rica Admin" <${EMAIL}>`,
-      to: `${USER_EMAIL}`,
+      to,
       subject: "Recuperación de Contraseña - Beneficios Costa Rica Admin",
       html: stringHtmlToSend,
     };

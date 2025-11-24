@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import { Users } from "../../models/Users";
 import { UserProfile } from "../../models/UserProfile";
-import { Model } from "sequelize";
+import { Model, Transaction } from "sequelize";
 import { UsersAttributes, UsersCreationAttributes } from "../../interfaces/users.interface";
 import { logger } from "../../logger/logger";
 import { ErrorI } from "../../interfaces/error.interface";
 import bcrypt from "bcrypt";
+import { UserProfileCreationAttributes } from "../../interfaces/user_profile.interface";
+import { dbConnection } from "../../connections/dbConnection";
 
 export const signupService: (req: Request, res: Response) => Promise<Response> = async (req: Request, res: Response) => {
+    let transaction: Transaction | undefined;
     try {
         const { username, password, id_user_role, email, nombre_completo, tipo_documento, numero_doc } = req.body;
 
@@ -50,50 +52,39 @@ export const signupService: (req: Request, res: Response) => Promise<Response> =
         const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS || 10);
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        const user: Model<UsersAttributes, UsersCreationAttributes> = await Users.create({
-            username,
-            password: hashedPassword,
-            id_user_role,
-            enabled: 1,
-        });
+        transaction = await dbConnection.transaction();
+
+        const user: Model<UsersAttributes, UsersCreationAttributes> = await Users.create(
+            {
+                username,
+                password: hashedPassword,
+                id_user_role,
+                enabled: 1,
+            },
+            { transaction }
+        );
 
         // Crear el perfil del usuario
-        await UserProfile.create({
+        const userProfileData: UserProfileCreationAttributes = {
             user_id: user.getDataValue("id_user"),
             email,
             nombre_completo,
             tipo_documento,
-            numero_doc
+            numero_doc,
+        };
+
+        await UserProfile.create(userProfileData, { transaction });
+
+        await transaction.commit();
+        transaction = undefined;
+
+        return res.status(201).json({
+            message: "Usuario creado exitosamente"
         });
-
-        const userData: UsersAttributes = user.get();
-
-        if (!process.env.WORD_SECRET) {
-            throw new Error("La variable de entorno WORD_SECRET no esta definida");
-        }
-
-        const token = jwt.sign(
-            {
-                id_user: user.getDataValue("id_user"),
-                username: user.getDataValue("username"),
-                id_user_role: user.getDataValue("id_user_role"),
-            },
-            process.env.WORD_SECRET
-        );
-
-        return res.header("x-access-token", token).status(201).json(userData);
     } catch (error: any) {
-        // Manejar errores de validación de Sequelize
-        if (error.name === "SequelizeUniqueConstraintError") {
-            logger.error(`El username ya existe | status: 409`);
-            const responseError: ErrorI = {
-                error: true,
-                message: `El username ya está en uso. Por favor, elige otro username.`,
-                statusCode: 409,
-            };
-            throw responseError;
+        if (transaction) {
+            await transaction.rollback();
         }
-
         if (error.name === "SequelizeValidationError" || error.name === "SequelizeForeignKeyConstraintError") {
             logger.error(`Error de validación: ${error.message} | status: 400`);
             const responseError: ErrorI = {

@@ -3,7 +3,29 @@ import jwt from "jsonwebtoken";
 import { ErrorI } from "../interfaces/error.interface";
 
 export const validateResetToken = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.body.token ? req.body.token.toString() : "";
+    // Intentar obtener el token desde múltiples fuentes (en orden de prioridad):
+    // 1. Query parameter: ?token=xxx
+    // 2. Path parameter: /reset-password/:token
+    // 3. Header personalizado: x-reset-token
+    // 4. Authorization header: Bearer <token>
+    // 5. Body (por compatibilidad con versiones anteriores)
+    let token: string = "";
+    
+    if (req.query.token) {
+        token = req.query.token.toString();
+    } else if (req.params.token) {
+        token = req.params.token.toString();
+    } else if (req.headers["x-reset-token"]) {
+        token = req.headers["x-reset-token"].toString();
+    } else if (req.headers.authorization) {
+        // Extraer token del formato "Bearer <token>"
+        const authHeader = req.headers.authorization;
+        if (authHeader.startsWith("Bearer ")) {
+            token = authHeader.substring(7);
+        }
+    } else if (req.body.token) {
+        token = req.body.token.toString();
+    }
 
     if (!token) {
         const responseError: ErrorI = {

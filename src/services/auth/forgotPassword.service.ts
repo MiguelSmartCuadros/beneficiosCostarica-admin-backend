@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Users } from "../../models/Users";
+import { UserProfile } from "../../models/UserProfile";
 import { Model } from "sequelize";
 import { UsersAttributes, UsersCreationAttributes } from "../../interfaces/users.interface";
 import jwt from "jsonwebtoken";
@@ -30,6 +31,32 @@ export const forgotPasswordService: (req: Request, res: Response) => Promise<Res
             return res.status(404).json(responseError);
         }
 
+        const userProfile = await UserProfile.findOne({
+            where: { user_id: user.getDataValue("id_user") },
+        });
+
+        if (!userProfile) {
+            logger.error("Perfil de usuario no encontrado | status: 404");
+            const responseError: ErrorI = {
+                error: true,
+                message: "Perfil de usuario no encontrado",
+                statusCode: 404,
+            };
+            return res.status(404).json(responseError);
+        }
+
+        const userEmail: string | null = userProfile.getDataValue("email");
+
+        if (!userEmail) {
+            logger.error("El usuario no cuenta con un email registrado | status: 400");
+            const responseError: ErrorI = {
+                error: true,
+                message: "El usuario no cuenta con un email registrado",
+                statusCode: 400,
+            };
+            return res.status(400).json(responseError);
+        }
+
         if (!process.env.WORD_SECRET) {
             throw new Error("La variable de entorno WORD_SECRET no esta definida");
         }
@@ -54,7 +81,7 @@ export const forgotPasswordService: (req: Request, res: Response) => Promise<Res
         }
 
         await sendPasswordResetEmail(
-            process.env.EMAIL,
+            userEmail,
             reset_token,
             user.getDataValue("username"),
         );
