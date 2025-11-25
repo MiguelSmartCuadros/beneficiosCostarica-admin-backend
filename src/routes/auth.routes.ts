@@ -249,7 +249,7 @@ authRouter.post("/login", loginController);
  *                          type: number
  *                          description: Código de error
  *       409:
- *         description: El username ya está en uso
+ *         description: Conflicto - El username, email o número de documento ya está en uso
  *         content:
  *           application/json:
  *             schema:
@@ -260,10 +260,29 @@ authRouter.post("/login", loginController);
  *                          description: Booleano que indica que hubo un error
  *                      message:
  *                          type: string
- *                          description: Mensaje indicando que el username ya está en uso
+ *                          description: Mensaje indicando el tipo de conflicto. Puede ser: "El username X ya está en uso. Por favor, elige otro username.", "El email X ya está registrado.", o "El número de documento X ya está registrado."
  *                      statusCode:
  *                          type: number
  *                          description: Código de error (409)
+ *             examples:
+ *               usernameDuplicado:
+ *                 summary: Username duplicado
+ *                 value:
+ *                   error: true
+ *                   message: "El nombre de usuario o el e-mail ya está en uso. Elige otro."
+ *                   statusCode: 409
+ *               emailDuplicado:
+ *                 summary: Email duplicado
+ *                 value:
+ *                   error: true
+ *                   message: "El nombre de usuario o el e-mail ya está en uso. Elige otro."
+ *                   statusCode: 409
+ *               documentoDuplicado:
+ *                 summary: Número de documento duplicado
+ *                 value:
+ *                   error: true
+ *                   message: "El número de documento 123456789 ya está registrado."
+ *                   statusCode: 409
  *       500:
  *         description: Error interno del servidor
  *         content:
