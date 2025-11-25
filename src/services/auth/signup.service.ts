@@ -48,6 +48,18 @@ export const signupService: (req: Request, res: Response) => Promise<Response> =
             return res.status(409).json(responseError);
         }
 
+        // Verificar si el número de documento ya existe
+        const existingDocument = await UserProfile.findOne({ where: { numero_doc } });
+        if (existingDocument) {
+            logger.error(`El número de documento ${numero_doc} ya existe | status: 409`);
+            const responseError: ErrorI = {
+                error: true,
+                message: `El número de documento ${numero_doc} ya está registrado.`,
+                statusCode: 409,
+            };
+            return res.status(409).json(responseError);
+        }
+
         // Hashear la contraseña del nuevo usuario
         const saltRounds = Number(process.env.BCRYPT_SALT_ROUNDS || 10);
         const hashedPassword = await bcrypt.hash(password, saltRounds);
