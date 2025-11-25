@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { Users } from "../../models/Users";
 import { UserProfile } from "../../models/UserProfile";
+import { UserRoles } from "../../models/UserRoles";
 import { Model, Transaction } from "sequelize";
 import { UsersAttributes, UsersCreationAttributes } from "../../interfaces/users.interface";
 import { logger } from "../../logger/logger";
 import { ErrorI } from "../../interfaces/error.interface";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { UserProfileCreationAttributes } from "../../interfaces/user_profile.interface";
 import { dbConnection } from "../../connections/dbConnection";
 
@@ -19,6 +21,18 @@ export const signupService: (req: Request, res: Response) => Promise<Response> =
             const responseError: ErrorI = {
                 error: true,
                 message: "Todos los campos son requeridos",
+                statusCode: 400,
+            };
+            return res.status(400).json(responseError);
+        }
+
+        // Verificar que el id_user_role existe
+        const existingRole = await UserRoles.findByPk(id_user_role);
+        if (!existingRole) {
+            logger.error(`El id_user_role ${id_user_role} no existe | status: 400`);
+            const responseError: ErrorI = {
+                error: true,
+                message: `El rol de usuario con id ${id_user_role} no existe. Verifica que el id_user_role sea válido.`,
                 statusCode: 400,
             };
             return res.status(400).json(responseError);
@@ -85,26 +99,81 @@ export const signupService: (req: Request, res: Response) => Promise<Response> =
             numero_doc,
         };
 
-        await UserProfile.create(userProfileData, { transaction });
+        const userProfile = await UserProfile.create(userProfileData, { transaction });
 
         await transaction.commit();
         transaction = undefined;
 
-        return res.status(201).json({
-            message: "Usuario creado exitosamente"
-        });
+        // Obtener el rol del usuario para incluirlo en la respuesta
+        const userRole = await UserRoles.findByPk(id_user_role);
+
+        // Generar token JWT para el nuevo usuario
+        if (!process.env.WORD_SECRET) {
+            throw new Error("La variable de entorno WORD_SECRET no esta definida");
+        }
+
+        const sign_token_options: jwt.SignOptions = {
+            expiresIn: process.env.TIME_TOKEN,
+        };
+
+        const token = jwt.sign(
+            {
+                id_user: user.getDataValue("id_user"),
+                username: user.getDataValue("username"),
+                id_user_role: user.getDataValue("id_user_role"),
+            },
+            process.env.WORD_SECRET,
+            sign_token_options
+        );
+
+        // Preparar la respuesta con los datos completos del usuario
+        const userResponse = {
+            id_user: user.getDataValue("id_user"),
+            username: user.getDataValue("username"),
+            id_user_role: user.getDataValue("id_user_role"),
+            enabled: user.getDataValue("enabled"),
+            email: userProfile.getDataValue("email"),
+            nombre_completo: userProfile.getDataValue("nombre_completo"),
+            tipo_documento: userProfile.getDataValue("tipo_documento"),
+            numero_doc: userProfile.getDataValue("numero_doc"),
+        };
+
+        return res
+            .header({
+                "Access-Control-Expose-Headers": "x-access-token",
+                "x-access-token": token,
+            })
+            .status(201)
+            .json({
+                message: "Usuario creado exitosamente",
+                user: userResponse,
+            });
     } catch (error: any) {
         if (transaction) {
             await transaction.rollback();
         }
-        if (error.name === "SequelizeValidationError" || error.name === "SequelizeForeignKeyConstraintError") {
+        if (error.name === "SequelizeValidationError") {
             logger.error(`Error de validación: ${error.message} | status: 400`);
             const responseError: ErrorI = {
                 error: true,
-                message: error.message || "Error de validación. Verifica que el id_user_role sea válido y que todos los campos requeridos estén presentes.",
+                message: error.message || "Error de validación. Verifica que todos los campos requeridos estén presentes y sean válidos.",
                 statusCode: 400,
             };
-            throw responseError;
+            return res.status(400).json(responseError);
+        }
+        if (error.name === "SequelizeForeignKeyConstraintError") {
+            logger.error(`Error de foreign key constraint: ${error.message} | status: 400`);
+            const responseError: ErrorI = {
+                error: true,
+                message: "Error de validación. Verifica que el id_user_role sea válido y exista en la base de datos.",
+                statusCode: 400,
+            };
+            return res.status(400).json(responseError);
+        }
+
+        // Si el error ya tiene formato ErrorI, retornarlo directamente
+        if (error && typeof error === "object" && "error" in error && "message" in error && "statusCode" in error) {
+            return res.status(error.statusCode).json(error);
         }
 
         const responseError: ErrorI = {
@@ -113,7 +182,7 @@ export const signupService: (req: Request, res: Response) => Promise<Response> =
             statusCode: 500,
         };
         logger.error(`${responseError.message} | status: 500`);
-        throw responseError;
+        return res.status(500).json(responseError);
     }
 };
 

@@ -6,6 +6,7 @@ import { Categories } from "../models/Categories";
 import { Stores } from "../models/Stores";
 import { Typeshops } from "../models/Typeshops";
 import { Provinces } from "../models/Provinces";
+import { TipoDocumentoIdentidad } from "../models/TipoDocumentoIdentidad";
 import { logger } from "../logger/logger";
 
 Users.belongsTo(UserRoles, {

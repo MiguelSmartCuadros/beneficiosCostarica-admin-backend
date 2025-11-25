@@ -215,7 +215,58 @@ authRouter.post("/login", loginController);
  *           application/json:
  *             schema:
  *                 type: object
- *                 $ref: '#/components/schemas/users'
+ *                 properties:
+ *                     message:
+ *                         type: string
+ *                         description: Mensaje de confirmación
+ *                         example: "Usuario creado exitosamente"
+ *                     user:
+ *                         type: object
+ *                         description: Datos completos del usuario creado
+ *                         properties:
+ *                             id_user:
+ *                                 type: integer
+ *                                 description: ID único del usuario
+ *                                 example: 123
+ *                             username:
+ *                                 type: string
+ *                                 description: Nombre de usuario
+ *                                 example: "front1"
+ *                             id_user_role:
+ *                                 type: integer
+ *                                 description: ID del rol del usuario
+ *                                 example: 2
+ *                             enabled:
+ *                                 type: integer
+ *                                 description: Estado del usuario (1 = habilitado, 0 = deshabilitado)
+ *                                 example: 1
+ *                             email:
+ *                                 type: string
+ *                                 description: Email del usuario
+ *                                 example: "user@example.com"
+ *                             nombre_completo:
+ *                                 type: string
+ *                                 description: Nombre completo del usuario
+ *                                 example: "Juan Pérez"
+ *                             tipo_documento:
+ *                                 type: integer
+ *                                 description: Tipo de documento del usuario
+ *                                 example: 1
+ *                             numero_doc:
+ *                                 type: string
+ *                                 description: Número de documento del usuario
+ *                                 example: "123456789"
+ *             example:
+ *                 message: "Usuario creado exitosamente"
+ *                 user:
+ *                     id_user: 123
+ *                     username: "front1"
+ *                     id_user_role: 2
+ *                     enabled: 1
+ *                     email: "user@example.com"
+ *                     nombre_completo: "Juan Pérez"
+ *                     tipo_documento: 1
+ *                     numero_doc: "123456789"
  *       400:
  *         description: Datos de entrada inválidos o inexistentes, o error de validación (id_user_role inválido)
  *         content:
