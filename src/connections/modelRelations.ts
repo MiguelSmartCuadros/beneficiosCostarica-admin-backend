@@ -2,6 +2,8 @@ import { dbConnection } from "./dbConnection";
 import { UserRoles } from "../models/UserRoles";
 import { Users } from "../models/Users";
 import { UserProfile } from "../models/UserProfile";
+import { Categories } from "../models/Categories";
+import { Stores } from "../models/Stores";
 import { logger } from "../logger/logger";
 
 Users.belongsTo(UserRoles, {
@@ -20,6 +22,21 @@ Users.hasOne(UserProfile, {
 UserProfile.belongsTo(Users, {
   foreignKey: "user_id",
   targetKey: "id_user",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+// Relación entre Stores y Categories
+Stores.belongsTo(Categories, {
+  foreignKey: "category_id",
+  targetKey: "id_category",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+Categories.hasMany(Stores, {
+  foreignKey: "category_id",
+  sourceKey: "id_category",
   constraints: true,
   foreignKeyConstraint: true,
 });
