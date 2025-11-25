@@ -10,6 +10,7 @@ import { typeshopsRouter } from "../routes/typeshops.routes";
 import { provincesRouter } from "../routes/provinces.routes";
 import { userRolesRouter } from "../routes/user_roles.routes";
 import { tipoDocumentoIdentidadRouter } from "../routes/tipo_documento_identidad.routes";
+import { typeshopProfileRouter } from "../routes/typeshop_profile.routes";
 
 const router = Router();
 
@@ -21,6 +22,7 @@ router.use("/typeshops", typeshopsRouter);
 router.use("/provinces", provincesRouter);
 router.use("/user-roles", userRolesRouter);
 router.use("/tipo-documento-identidad", tipoDocumentoIdentidadRouter);
+router.use("/typeshop-profile", typeshopProfileRouter);
 
 router.use("/admin", verify_JWT, isAdmin, (_req: Request, res: Response) => {
   res.status(202).json({

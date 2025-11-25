@@ -33,6 +33,20 @@ const provincesRouter: Router = Router();
  *     responses:
  *       201:
  *         description: Provincia creada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      message:
+ *                          type: string
+ *                      province:
+ *                          type: object
+ *                          properties:
+ *                              id_province:
+ *                                  type: number
+ *                              province_name:
+ *                                  type: string
  *       400:
  *         description: Datos inválidos
  *       409:
@@ -53,6 +67,22 @@ provincesRouter.post("/create-province", verify_JWT, isAdmin, createProvinceCont
  *     responses:
  *       200:
  *         description: Lista de provincias obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      provinces:
+ *                          type: array
+ *                          items:
+ *                              type: object
+ *                              properties:
+ *                                  id_province:
+ *                                      type: number
+ *                                  province_name:
+ *                                      type: string
+ *                      total:
+ *                          type: number
  *       500:
  *         description: Error interno del servidor
  */
@@ -76,6 +106,18 @@ provincesRouter.get("/getall-provinces", verify_JWT, isAdmin, getAllProvincesCon
  *     responses:
  *       200:
  *         description: Provincia obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      province:
+ *                          type: object
+ *                          properties:
+ *                              id_province:
+ *                                  type: number
+ *                              province_name:
+ *                                  type: string
  *       400:
  *         description: ID inválido
  *       404:
@@ -114,6 +156,20 @@ provincesRouter.get("/get-province/:id", verify_JWT, isAdmin, getProvinceByIdCon
  *     responses:
  *       200:
  *         description: Provincia actualizada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      message:
+ *                          type: string
+ *                      province:
+ *                          type: object
+ *                          properties:
+ *                              id_province:
+ *                                  type: number
+ *                              province_name:
+ *                                  type: string
  *       400:
  *         description: Datos inválidos
  *       404:
@@ -143,6 +199,13 @@ provincesRouter.put("/update-province/:id", verify_JWT, isAdmin, updateProvinceC
  *     responses:
  *       200:
  *         description: Provincia eliminada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      message:
+ *                          type: string
  *       400:
  *         description: ID inválido
  *       404:

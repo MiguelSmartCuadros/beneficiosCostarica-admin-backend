@@ -243,7 +243,7 @@ authRouter.post("/login", loginController);
  *                             email:
  *                                 type: string
  *                                 description: Email del usuario
- *                                 example: "user@example.com"
+ *                                 example: "user@examp.com"
  *                             nombre_completo:
  *                                 type: string
  *                                 description: Nombre completo del usuario
@@ -263,7 +263,7 @@ authRouter.post("/login", loginController);
  *                     username: "front1"
  *                     id_user_role: 2
  *                     enabled: 1
- *                     email: "user@example.com"
+ *                     email: "user@examp.com"
  *                     nombre_completo: "Juan Pérez"
  *                     tipo_documento: 1
  *                     numero_doc: "123456789"
@@ -311,7 +311,7 @@ authRouter.post("/login", loginController);
  *                          description: Booleano que indica que hubo un error
  *                      message:
  *                          type: string
- *                          description: Mensaje indicando el tipo de conflicto. Puede ser: "El username X ya está en uso. Por favor, elige otro username.", "El email X ya está registrado.", o "El número de documento X ya está registrado."
+ *                          description: "Mensaje indicando el tipo de conflicto. Puede ser: 'El username X ya está en uso. Por favor, elige otro username.', 'El email X ya está registrado.', o 'El número de documento X ya está registrado.'"
  *                      statusCode:
  *                          type: number
  *                          description: Código de error (409)
@@ -351,7 +351,7 @@ authRouter.post("/login", loginController);
  *                          type: number
  *                          description: Código de error
  *     security:
- *      - x-access-token: []
+ *       - x-access-token: []
  *
  */
 authRouter.post("/signup", verify_JWT, isAdmin, signupController);
@@ -475,7 +475,7 @@ authRouter.post("/forgot-password", forgotPasswordController);
  *                   type: string
  *                   description: Nueva contraseña
  *               example:
- *                 usernameOrEmail: "usuario@example.com"
+ *                 usernameOrEmail: "usuario@examp.com"
  *                 token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *                 new_password: "NuevaPassword123"
  *     responses:

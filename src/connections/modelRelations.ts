@@ -7,6 +7,7 @@ import { Stores } from "../models/Stores";
 import { Typeshops } from "../models/Typeshops";
 import { Provinces } from "../models/Provinces";
 import { TipoDocumentoIdentidad } from "../models/TipoDocumentoIdentidad";
+import { TypeshopProfile } from "../models/TypeshopProfile";
 import { logger } from "../logger/logger";
 
 Users.belongsTo(UserRoles, {
@@ -70,6 +71,36 @@ Stores.belongsTo(Provinces, {
 Provinces.hasMany(Stores, {
   foreignKey: "province_id",
   sourceKey: "id_province",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+// Relación entre TypeshopProfile y Stores
+TypeshopProfile.belongsTo(Stores, {
+  foreignKey: "store_id",
+  targetKey: "id_stores",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+Stores.hasMany(TypeshopProfile, {
+  foreignKey: "store_id",
+  sourceKey: "id_stores",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+// Relación entre TypeshopProfile y Typeshops
+TypeshopProfile.belongsTo(Typeshops, {
+  foreignKey: "typeshop_id",
+  targetKey: "id_type_shop",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+Typeshops.hasMany(TypeshopProfile, {
+  foreignKey: "typeshop_id",
+  sourceKey: "id_type_shop",
   constraints: true,
   foreignKeyConstraint: true,
 });
