@@ -4,6 +4,8 @@ import { Users } from "../models/Users";
 import { UserProfile } from "../models/UserProfile";
 import { Categories } from "../models/Categories";
 import { Stores } from "../models/Stores";
+import { Typeshops } from "../models/Typeshops";
+import { Provinces } from "../models/Provinces";
 import { logger } from "../logger/logger";
 
 Users.belongsTo(UserRoles, {
@@ -37,6 +39,36 @@ Stores.belongsTo(Categories, {
 Categories.hasMany(Stores, {
   foreignKey: "category_id",
   sourceKey: "id_category",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+// Relación entre Stores y Typeshops
+Stores.belongsTo(Typeshops, {
+  foreignKey: "shop_type_id",
+  targetKey: "id_type_shop",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+Typeshops.hasMany(Stores, {
+  foreignKey: "shop_type_id",
+  sourceKey: "id_type_shop",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+// Relación entre Stores y Provinces
+Stores.belongsTo(Provinces, {
+  foreignKey: "province_id",
+  targetKey: "id_province",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+Provinces.hasMany(Stores, {
+  foreignKey: "province_id",
+  sourceKey: "id_province",
   constraints: true,
   foreignKeyConstraint: true,
 });

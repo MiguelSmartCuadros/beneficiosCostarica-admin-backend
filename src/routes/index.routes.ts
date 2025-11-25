@@ -6,6 +6,8 @@ import { projectInfo } from "../routes/projectInfo.routes";
 import { isAdmin } from "../middlewares/isAdmin";
 import { documentation } from "../routes/documentation.routes";
 import { categoriesRouter } from "../routes/categories.routes";
+import { typeshopsRouter } from "../routes/typeshops.routes";
+import { provincesRouter } from "../routes/provinces.routes";
 
 const router = Router();
 
@@ -13,6 +15,8 @@ router.use("/auth", authRouter);
 router.use("/projectInfo", projectInfo);
 router.use("/doc", documentation);
 router.use("/categories", categoriesRouter);
+router.use("/typeshops", typeshopsRouter);
+router.use("/provinces", provincesRouter);
 
 router.use("/admin", verify_JWT, isAdmin, (_req: Request, res: Response) => {
   res.status(202).json({
