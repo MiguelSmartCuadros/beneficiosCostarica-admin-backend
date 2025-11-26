@@ -31,6 +31,21 @@ UserProfile.belongsTo(Users, {
   foreignKeyConstraint: true,
 });
 
+// Relación entre Stores y Users (Responsable)
+Stores.belongsTo(Users, {
+  foreignKey: "id_user_responsible",
+  targetKey: "id_user",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+Users.hasOne(Stores, {
+  foreignKey: "id_user_responsible",
+  sourceKey: "id_user",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
 // Relación entre Stores y Categories
 Stores.belongsTo(Categories, {
   foreignKey: "category_id",

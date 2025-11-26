@@ -1,0 +1,604 @@
+{
+    "baseUrl": "/WebServices",
+    "endpoints": [
+        {
+            "category": "Autenticacion",
+            "endpoints": [
+                {
+                    "method": "GET",
+                    "path": "/auth/verify-token",
+                    "summary": "Verificar token de un usuario",
+                    "authentication": "x-access-token",
+                    "responses": {
+                        "200": "Token válido",
+                        "401": "Token inválido",
+                        "500": "Error interno"
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/auth/login",
+                    "summary": "Login de un usuario",
+                    "authentication": "none",
+                    "requestBody": {
+                        "username": "string",
+                        "password": "string"
+                    },
+                    "responses": {
+                        "200": "Usuario logueado con éxito (retorna: login, user_role, id_store si es ROLE_CORP)",
+                        "400": "Datos de entrada inválidos o inexistentes",
+                        "401": "Password inválida",
+                        "404": "Usuario no encontrado",
+                        "500": "Error interno"
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/auth/signup",
+                    "summary": "Registro de un usuario",
+                    "description": "Permite registrar un nuevo usuario, esta accion solo la puede realizar un usuario logeado",
+                    "authentication": "x-access-token (Admin)",
+                    "requestBody": {
+                        "username": "string",
+                        "password": "string",
+                        "id_user_role": "integer",
+                        "email": "string",
+                        "nombre_completo": "string",
+                        "tipo_documento": "integer",
+                        "numero_doc": "string"
+                    },
+                    "responses": {
+                        "201": "Usuario registrado con éxito",
+                        "400": "Datos de entrada inválidos o inexistentes, o error de validación",
+                        "401": "Acceso denegado",
+                        "409": "El username, email o número de documento ya está en uso",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/auth/forgot-password",
+                    "summary": "Solicitar recuperación de contraseña",
+                    "description": "Recibe el username del usuario, genera un token de reseteo de contraseña y envía las instrucciones al correo registrado",
+                    "authentication": "none",
+                    "requestBody": {
+                        "username": "string"
+                    },
+                    "responses": {
+                        "200": "Solicitud procesada correctamente",
+                        "400": "Datos de entrada inválidos o inexistentes",
+                        "404": "Usuario no encontrado",
+                        "500": "Error interno"
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/auth/reset-password",
+                    "summary": "Resetear contraseña",
+                    "description": "Utiliza el token enviado por email junto con la nueva contraseña. Devuelve un nuevo token JWT listo para iniciar sesión",
+                    "authentication": "none",
+                    "requestBody": {
+                        "usernameOrEmail": "string (opcional)",
+                        "username": "string (opcional)",
+                        "email": "string (opcional)",
+                        "token": "string",
+                        "new_password": "string"
+                    },
+                    "responses": {
+                        "200": "Contraseña restablecida exitosamente",
+                        "400": "Datos de entrada inválidos o inexistentes",
+                        "401": "Token inválido o expirado",
+                        "404": "Usuario o rol no encontrado",
+                        "500": "Error interno"
+                    }
+                }
+            ]
+        },
+        {
+            "category": "Categorias",
+            "endpoints": [
+                {
+                    "method": "POST",
+                    "path": "/categories/create-category",
+                    "summary": "Crear una nueva categoría",
+                    "authentication": "x-access-token (Admin)",
+                    "requestBody": {
+                        "name_category": "string"
+                    },
+                    "responses": {
+                        "201": "Categoría creada exitosamente",
+                        "400": "Datos de entrada inválidos",
+                        "409": "La categoría ya existe",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/categories/getall-categories",
+                    "summary": "Obtener todas las categorías",
+                    "authentication": "x-access-token (Admin)",
+                    "responses": {
+                        "200": "Lista de categorías obtenida exitosamente",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/categories/get-category/:id",
+                    "summary": "Obtener una categoría por su ID",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "responses": {
+                        "200": "Categoría obtenida exitosamente",
+                        "400": "ID inválido",
+                        "404": "Categoría no encontrada",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "PUT",
+                    "path": "/categories/update-category/:id",
+                    "summary": "Actualizar una categoría",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "requestBody": {
+                        "name_category": "string"
+                    },
+                    "responses": {
+                        "200": "Categoría actualizada exitosamente",
+                        "400": "Datos de entrada inválidos",
+                        "404": "Categoría no encontrada",
+                        "409": "El nombre de categoría ya existe",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "DELETE",
+                    "path": "/categories/delete-category/:id",
+                    "summary": "Eliminar una categoría",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "responses": {
+                        "200": "Categoría eliminada exitosamente",
+                        "400": "ID inválido",
+                        "404": "Categoría no encontrada",
+                        "409": "No se puede eliminar la categoría porque tiene stores asociados",
+                        "500": "Error interno del servidor"
+                    }
+                }
+            ]
+        },
+        {
+            "category": "Typeshops",
+            "endpoints": [
+                {
+                    "method": "POST",
+                    "path": "/typeshops/create-typeshop",
+                    "summary": "Crear un nuevo tipo de tienda",
+                    "authentication": "x-access-token (Admin)",
+                    "requestBody": {
+                        "shop_type_name": "string"
+                    },
+                    "responses": {
+                        "201": "Tipo de tienda creado exitosamente",
+                        "400": "Datos de entrada inválidos",
+                        "409": "El tipo de tienda ya existe",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/typeshops/getall-typeshops",
+                    "summary": "Obtener todos los tipos de tienda",
+                    "authentication": "x-access-token (Admin)",
+                    "responses": {
+                        "200": "Lista de tipos de tienda obtenida exitosamente",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/typeshops/get-typeshop/:id",
+                    "summary": "Obtener un tipo de tienda por su ID",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "responses": {
+                        "200": "Tipo de tienda obtenido exitosamente",
+                        "400": "ID inválido",
+                        "404": "Tipo de tienda no encontrado",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "PUT",
+                    "path": "/typeshops/update-typeshop/:id",
+                    "summary": "Actualizar un tipo de tienda",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "requestBody": {
+                        "shop_type_name": "string"
+                    },
+                    "responses": {
+                        "200": "Tipo de tienda actualizado exitosamente",
+                        "400": "Datos de entrada inválidos",
+                        "404": "Tipo de tienda no encontrado",
+                        "409": "El nombre ya existe",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "DELETE",
+                    "path": "/typeshops/delete-typeshop/:id",
+                    "summary": "Eliminar un tipo de tienda",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "responses": {
+                        "200": "Tipo de tienda eliminado exitosamente",
+                        "400": "ID inválido",
+                        "404": "Tipo de tienda no encontrado",
+                        "409": "Existen stores asociados",
+                        "500": "Error interno del servidor"
+                    }
+                }
+            ]
+        },
+        {
+            "category": "Provincias",
+            "endpoints": [
+                {
+                    "method": "POST",
+                    "path": "/provinces/create-province",
+                    "summary": "Crear una nueva provincia",
+                    "authentication": "x-access-token (Admin)",
+                    "requestBody": {
+                        "province_name": "string"
+                    },
+                    "responses": {
+                        "201": "Provincia creada exitosamente",
+                        "400": "Datos inválidos",
+                        "409": "La provincia ya existe",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/provinces/getall-provinces",
+                    "summary": "Obtener todas las provincias",
+                    "authentication": "x-access-token (Admin)",
+                    "responses": {
+                        "200": "Lista de provincias obtenida exitosamente",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/provinces/get-province/:id",
+                    "summary": "Obtener una provincia por su ID",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "responses": {
+                        "200": "Provincia obtenida exitosamente",
+                        "400": "ID inválido",
+                        "404": "Provincia no encontrada",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "PUT",
+                    "path": "/provinces/update-province/:id",
+                    "summary": "Actualizar una provincia",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "requestBody": {
+                        "province_name": "string"
+                    },
+                    "responses": {
+                        "200": "Provincia actualizada exitosamente",
+                        "400": "Datos inválidos",
+                        "404": "Provincia no encontrada",
+                        "409": "La provincia ya existe",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "DELETE",
+                    "path": "/provinces/delete-province/:id",
+                    "summary": "Eliminar una provincia",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "responses": {
+                        "200": "Provincia eliminada exitosamente",
+                        "400": "ID inválido",
+                        "404": "Provincia no encontrada",
+                        "409": "Existen stores asociados",
+                        "500": "Error interno del servidor"
+                    }
+                }
+            ]
+        },
+        {
+            "category": "User Roles",
+            "endpoints": [
+                {
+                    "method": "POST",
+                    "path": "/user-roles/create-user-role",
+                    "summary": "Crear un nuevo rol de usuario",
+                    "authentication": "x-access-token (Admin)",
+                    "requestBody": {
+                        "role": "string"
+                    },
+                    "responses": {
+                        "201": "Rol creado exitosamente",
+                        "400": "Datos de entrada inválidos",
+                        "409": "El rol ya existe",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/user-roles/getall-user-roles",
+                    "summary": "Obtener todos los roles de usuario",
+                    "authentication": "x-access-token (Admin)",
+                    "responses": {
+                        "200": "Lista de roles obtenida exitosamente",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/user-roles/get-user-role/:id",
+                    "summary": "Obtener un rol de usuario por su ID",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "responses": {
+                        "200": "Rol obtenido exitosamente",
+                        "400": "ID inválido",
+                        "404": "Rol no encontrado",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "PUT",
+                    "path": "/user-roles/update-user-role/:id",
+                    "summary": "Actualizar un rol de usuario",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "requestBody": {
+                        "role": "string"
+                    },
+                    "responses": {
+                        "200": "Rol actualizado exitosamente",
+                        "400": "Datos de entrada inválidos",
+                        "404": "Rol no encontrado",
+                        "409": "El nombre de rol ya existe",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "DELETE",
+                    "path": "/user-roles/delete-user-role/:id",
+                    "summary": "Eliminar un rol de usuario",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "responses": {
+                        "200": "Rol eliminado exitosamente",
+                        "400": "ID inválido",
+                        "404": "Rol no encontrado",
+                        "409": "No se puede eliminar el rol porque tiene usuarios asociados",
+                        "500": "Error interno del servidor"
+                    }
+                }
+            ]
+        },
+        {
+            "category": "Tipo Documento Identidad",
+            "endpoints": [
+                {
+                    "method": "POST",
+                    "path": "/tipo-documento-identidad/create-tipo-documento-identidad",
+                    "summary": "Crear un nuevo tipo de documento de identidad",
+                    "authentication": "x-access-token (Admin)",
+                    "requestBody": {
+                        "codigo": "string",
+                        "descripcion": "string"
+                    },
+                    "responses": {
+                        "201": "Tipo de documento creado exitosamente",
+                        "400": "Datos de entrada inválidos",
+                        "409": "El código de tipo de documento ya existe",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/tipo-documento-identidad/getall-tipo-documento-identidad",
+                    "summary": "Obtener todos los tipos de documento de identidad",
+                    "authentication": "x-access-token (Admin)",
+                    "responses": {
+                        "200": "Lista de tipos de documento obtenida exitosamente",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/tipo-documento-identidad/get-tipo-documento-identidad/:id",
+                    "summary": "Obtener un tipo de documento de identidad por su ID",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "responses": {
+                        "200": "Tipo de documento obtenido exitosamente",
+                        "400": "ID inválido",
+                        "404": "Tipo de documento no encontrado",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "PUT",
+                    "path": "/tipo-documento-identidad/update-tipo-documento-identidad/:id",
+                    "summary": "Actualizar un tipo de documento de identidad",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "requestBody": {
+                        "codigo": "string (opcional)",
+                        "descripcion": "string (opcional)"
+                    },
+                    "responses": {
+                        "200": "Tipo de documento actualizado exitosamente",
+                        "400": "Datos de entrada inválidos",
+                        "404": "Tipo de documento no encontrado",
+                        "409": "El código de tipo de documento ya existe",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "DELETE",
+                    "path": "/tipo-documento-identidad/delete-tipo-documento-identidad/:id",
+                    "summary": "Eliminar un tipo de documento de identidad",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "responses": {
+                        "200": "Tipo de documento eliminado exitosamente",
+                        "400": "ID inválido",
+                        "404": "Tipo de documento no encontrado",
+                        "500": "Error interno del servidor"
+                    }
+                }
+            ]
+        },
+        {
+            "category": "Typeshop Profile",
+            "endpoints": [
+                {
+                    "method": "POST",
+                    "path": "/typeshop-profile/create-typeshop-profile",
+                    "summary": "Crear un nuevo perfil de tipo de tienda",
+                    "authentication": "x-access-token (Admin)",
+                    "requestBody": {
+                        "store_id": "number",
+                        "typeshop_id": "number",
+                        "url_store": "string"
+                    },
+                    "responses": {
+                        "201": "Perfil creado exitosamente",
+                        "400": "Datos de entrada inválidos",
+                        "404": "Store o Typeshop no encontrado",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/typeshop-profile/getall-typeshop-profiles",
+                    "summary": "Obtener todos los perfiles de tipo de tienda",
+                    "authentication": "x-access-token (Admin)",
+                    "responses": {
+                        "200": "Lista de perfiles obtenida exitosamente",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/typeshop-profile/get-typeshop-profile/:id",
+                    "summary": "Obtener un perfil de tipo de tienda por su ID",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "responses": {
+                        "200": "Perfil obtenido exitosamente",
+                        "400": "ID inválido",
+                        "404": "Perfil no encontrado",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "PUT",
+                    "path": "/typeshop-profile/update-typeshop-profile/:id",
+                    "summary": "Actualizar un perfil de tipo de tienda",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "requestBody": {
+                        "store_id": "number (opcional)",
+                        "typeshop_id": "number (opcional)",
+                        "url_store": "string (opcional)"
+                    },
+                    "responses": {
+                        "200": "Perfil actualizado exitosamente",
+                        "400": "Datos de entrada inválidos",
+                        "404": "Perfil, Store o Typeshop no encontrado",
+                        "500": "Error interno del servidor"
+                    }
+                },
+                {
+                    "method": "DELETE",
+                    "path": "/typeshop-profile/delete-typeshop-profile/:id",
+                    "summary": "Eliminar un perfil de tipo de tienda",
+                    "authentication": "x-access-token (Admin)",
+                    "parameters": {
+                        "id": "integer (path)"
+                    },
+                    "responses": {
+                        "200": "Perfil eliminado exitosamente",
+                        "400": "ID inválido",
+                        "404": "Perfil no encontrado",
+                        "500": "Error interno del servidor"
+                    }
+                }
+            ]
+        },
+        {
+            "category": "AsignedCodesUser",
+            "endpoints": [
+                {
+                    "method": "GET",
+                    "path": "/asigned-codes-user/getall-asigned-codes",
+                    "summary": "Obtener todos los códigos asignados",
+                    "authentication": "x-access-token (Admin)",
+                    "description": "Endpoint de solo lectura para consultar códigos asignados a usuarios",
+                    "responses": {
+                        "200": "Lista de códigos asignados obtenida exitosamente",
+                        "500": "Error interno del servidor"
+                    }
+                }
+            ]
+        }
+    ],
+    "notes": {
+        "authentication": {
+            "x-access-token": "Token JWT requerido en el header 'x-access-token'",
+            "Admin": "Requiere privilegios de administrador (middleware isAdmin)"
+        },
+        "baseUrlComplete": "http://localhost:3001/WebServices"
+    }
+}

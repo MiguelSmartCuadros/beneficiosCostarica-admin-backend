@@ -8,6 +8,8 @@ import { logger } from "../../logger/logger";
 import { ErrorI } from "../../interfaces/error.interface";
 import { UserRolesAttributes, UserRolesCreationAttributes } from "../../interfaces/user_roles.interface";
 import { UserRoles } from "../../models/UserRoles";
+import { Stores } from "../../models/Stores";
+import { StoresAttributes, StoresCreationAttributes } from "../../interfaces/stores.interface";
 
 export const loginService: (req: Request, res: Response) => Promise<Response> = async (req: Request, res: Response) => {
   try {
@@ -87,13 +89,45 @@ export const loginService: (req: Request, res: Response) => Promise<Response> = 
       sign_token_options
     );
 
+
+    let id_store: number | null = null;
+
+    logger.info(`Login User Role: ${user_role.getDataValue("role")}`);
+
+    if (user_role.getDataValue("role") === "ROLE_CORP") {
+      const store: Model<StoresAttributes, StoresCreationAttributes> | null = await Stores.findOne({
+        where: {
+          id_user_responsible: user.getDataValue("id_user"),
+        },
+      });
+
+      logger.info(`Store found: ${store ? JSON.stringify(store.toJSON()) : "null"}`);
+
+      if (store) {
+        id_store = store.getDataValue("id_stores");
+      }
+    } else {
+      logger.info(`User role is not ROLE_CORP, skipping store lookup.`);
+    }
+
+    const responseBody: any = {
+      login: true,
+      user_role: user_role.getDataValue("role"),
+    };
+
+    if (id_store) {
+      responseBody.id_store = id_store;
+    } else if (user_role.getDataValue("role") === "ROLE_CORP") {
+      responseBody.id_store = null;
+    }
+
     return res
       .header({
         "Access-Control-Expose-Headers": "x-access-token",
         "x-access-token": token,
       })
       .status(200)
-      .json({ login: true, user_role: user_role.getDataValue("role") });
+      .json(responseBody);
   } catch (error: any) {
     const responseError: ErrorI = {
       error: true,

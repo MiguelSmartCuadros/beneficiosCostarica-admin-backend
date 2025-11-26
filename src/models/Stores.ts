@@ -51,26 +51,6 @@ export const Stores = dbConnection.define(
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    discount_description: {
-      type: DataTypes.STRING(150),
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING(1000),
-      allowNull: true,
-    },
-    terms_conditions: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    restrictions: {
-      type: DataTypes.STRING(500),
-      allowNull: true,
-    },
-    url_terms_conditions: {
-      type: DataTypes.STRING(500),
-      allowNull: true,
-    },
   },
   {
     timestamps: false,

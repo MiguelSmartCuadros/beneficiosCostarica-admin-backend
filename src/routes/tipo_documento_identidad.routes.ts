@@ -11,7 +11,7 @@ const tipoDocumentoIdentidadRouter: Router = Router();
 
 /**
  * @openapi
- * /tipo-documento-identidad:
+ * /tipo-documento-identidad/create-tipo-documento-identidad:
  *   post:
  *     tags: [Tipo Documento Identidad]
  *     summary: Crear un nuevo tipo de documento de identidad
@@ -65,7 +65,7 @@ tipoDocumentoIdentidadRouter.post("/create-tipo-documento-identidad", verify_JWT
 
 /**
  * @openapi
- * /tipo-documento-identidad:
+ * /tipo-documento-identidad/getall-tipo-documento-identidad:
  *   get:
  *     tags: [Tipo Documento Identidad]
  *     summary: Obtener todos los tipos de documento de identidad
@@ -99,7 +99,7 @@ tipoDocumentoIdentidadRouter.get("/getall-tipo-documento-identidad", verify_JWT,
 
 /**
  * @openapi
- * /tipo-documento-identidad/{id}:
+ * /tipo-documento-identidad/get-tipo-documento-identidad/{id}:
  *   get:
  *     tags: [Tipo Documento Identidad]
  *     summary: Obtener un tipo de documento de identidad por su ID
@@ -140,7 +140,7 @@ tipoDocumentoIdentidadRouter.get("/get-tipo-documento-identidad/:id", verify_JWT
 
 /**
  * @openapi
- * /tipo-documento-identidad/{id}:
+ * /tipo-documento-identidad/update-tipo-documento-identidad/{id}:
  *   put:
  *     tags: [Tipo Documento Identidad]
  *     summary: Actualizar un tipo de documento de identidad
@@ -196,7 +196,7 @@ tipoDocumentoIdentidadRouter.put("/update-tipo-documento-identidad/:id", verify_
 
 /**
  * @openapi
- * /tipo-documento-identidad/{id}:
+ * /tipo-documento-identidad/delete-tipo-documento-identidad/{id}:
  *   delete:
  *     tags: [Tipo Documento Identidad]
  *     summary: Eliminar un tipo de documento de identidad

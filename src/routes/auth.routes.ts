@@ -103,6 +103,9 @@ authRouter.get("/verify-token", verify_JWT, verifyTokenController);
  *                      user_role:
  *                          type: string
  *                          description: Rol del usuario
+ *                      id_store:
+ *                          type: integer
+ *                          description: ID de la tienda asociada al usuario (si aplica)
  *         headers:
  *             x-access-token:
  *                 description: Token de autenticación de usuario (JWT)
