@@ -8,6 +8,7 @@ import { Typeshops } from "../models/Typeshops";
 import { Provinces } from "../models/Provinces";
 import { TipoDocumentoIdentidad } from "../models/TipoDocumentoIdentidad";
 import { TypeshopProfile } from "../models/TypeshopProfile";
+import { AsignedCodesUser } from "../models/AsignedCodesUser";
 import { logger } from "../logger/logger";
 
 Users.belongsTo(UserRoles, {
@@ -101,6 +102,21 @@ TypeshopProfile.belongsTo(Typeshops, {
 Typeshops.hasMany(TypeshopProfile, {
   foreignKey: "typeshop_id",
   sourceKey: "id_type_shop",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+// Relación entre AsignedCodesUser y Stores
+AsignedCodesUser.belongsTo(Stores, {
+  foreignKey: "store_id",
+  targetKey: "id_stores",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+Stores.hasMany(AsignedCodesUser, {
+  foreignKey: "store_id",
+  sourceKey: "id_stores",
   constraints: true,
   foreignKeyConstraint: true,
 });
