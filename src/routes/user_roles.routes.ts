@@ -11,9 +11,125 @@ const userRolesRouter: Router = Router();
 
 /**
  * @openapi
+ * /user-roles/getall-user-roles:
+ *   get:
+ *     tags: [User Roles]
+ *     summary: Obtener todos los roles de usuario
+ *     security:
+ *       - x-access-token: []
+ *     responses:
+ *       200:
+ *         description: Lista de roles de usuario obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      userRoles:
+ *                          type: array
+ *                          items:
+ *                              type: object
+ *                              properties:
+ *                                  user_role_id:
+ *                                      type: number
+ *                                  role:
+ *                                      type: string
+ *                      total:
+ *                          type: number
+ *                          description: Total de roles de usuario
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      error:
+ *                          type: boolean
+ *                      message:
+ *                          type: string
+ *                      statusCode:
+ *                          type: number
+ */
+userRolesRouter.get("/getall-user-roles", verify_JWT, isAdmin, getAllUserRolesController);
+
+/**
+ * @openapi
+ * /user-roles/get-user-role/{id}:
+ *   get:
+ *     tags: [User Roles]
+ *     summary: Obtener un rol de usuario por su ID
+ *     security:
+ *       - x-access-token: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del rol de usuario
+ *     responses:
+ *       200:
+ *         description: Rol de usuario obtenido exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      userRole:
+ *                          type: object
+ *                          properties:
+ *                              user_role_id:
+ *                                  type: number
+ *                              role:
+ *                                  type: string
+ *       400:
+ *         description: ID inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      error:
+ *                          type: boolean
+ *                      message:
+ *                          type: string
+ *                      statusCode:
+ *                          type: number
+ *       404:
+ *         description: Rol de usuario no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      error:
+ *                          type: boolean
+ *                      message:
+ *                          type: string
+ *                      statusCode:
+ *                          type: number
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      error:
+ *                          type: boolean
+ *                      message:
+ *                          type: string
+ *                      statusCode:
+ *                          type: number
+ */
+userRolesRouter.get("/get-user-role/:id", verify_JWT, isAdmin, getUserRoleByIdController);
+
+/**
+ * @openapi
  * /user-roles/create-user-role:
  *   post:
- *     tags: [Roles de Usuario]
+ *     tags: [User Roles]
  *     summary: Crear un nuevo rol de usuario
  *     security:
  *       - x-access-token: []
@@ -92,125 +208,9 @@ userRolesRouter.post("/create-user-role", verify_JWT, isAdmin, createUserRoleCon
 
 /**
  * @openapi
- * /user-roles/getall-user-roles:
- *   get:
- *     tags: [Roles de Usuario]
- *     summary: Obtener todos los roles de usuario
- *     security:
- *       - x-access-token: []
- *     responses:
- *       200:
- *         description: Lista de roles de usuario obtenida exitosamente
- *         content:
- *           application/json:
- *             schema:
- *                 type: object
- *                 properties:
- *                      userRoles:
- *                          type: array
- *                          items:
- *                              type: object
- *                              properties:
- *                                  user_role_id:
- *                                      type: number
- *                                  role:
- *                                      type: string
- *                      total:
- *                          type: number
- *                          description: Total de roles de usuario
- *       500:
- *         description: Error interno del servidor
- *         content:
- *           application/json:
- *             schema:
- *                 type: object
- *                 properties:
- *                      error:
- *                          type: boolean
- *                      message:
- *                          type: string
- *                      statusCode:
- *                          type: number
- */
-userRolesRouter.get("/getall-user-roles", verify_JWT, isAdmin, getAllUserRolesController);
-
-/**
- * @openapi
- * /user-roles/get-user-role/{id}:
- *   get:
- *     tags: [Roles de Usuario]
- *     summary: Obtener un rol de usuario por su ID
- *     security:
- *       - x-access-token: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID del rol de usuario
- *     responses:
- *       200:
- *         description: Rol de usuario obtenido exitosamente
- *         content:
- *           application/json:
- *             schema:
- *                 type: object
- *                 properties:
- *                      userRole:
- *                          type: object
- *                          properties:
- *                              user_role_id:
- *                                  type: number
- *                              role:
- *                                  type: string
- *       400:
- *         description: ID inválido
- *         content:
- *           application/json:
- *             schema:
- *                 type: object
- *                 properties:
- *                      error:
- *                          type: boolean
- *                      message:
- *                          type: string
- *                      statusCode:
- *                          type: number
- *       404:
- *         description: Rol de usuario no encontrado
- *         content:
- *           application/json:
- *             schema:
- *                 type: object
- *                 properties:
- *                      error:
- *                          type: boolean
- *                      message:
- *                          type: string
- *                      statusCode:
- *                          type: number
- *       500:
- *         description: Error interno del servidor
- *         content:
- *           application/json:
- *             schema:
- *                 type: object
- *                 properties:
- *                      error:
- *                          type: boolean
- *                      message:
- *                          type: string
- *                      statusCode:
- *                          type: number
- */
-userRolesRouter.get("/get-user-role/:id", verify_JWT, isAdmin, getUserRoleByIdController);
-
-/**
- * @openapi
  * /user-roles/update-user-role/{id}:
  *   put:
- *     tags: [Roles de Usuario]
+ *     tags: [User Roles]
  *     summary: Actualizar un rol de usuario
  *     security:
  *       - x-access-token: []
@@ -310,7 +310,7 @@ userRolesRouter.put("/update-user-role/:id", verify_JWT, isAdmin, updateUserRole
  * @openapi
  * /user-roles/delete-user-role/{id}:
  *   delete:
- *     tags: [Roles de Usuario]
+ *     tags: [User Roles]
  *     summary: Eliminar un rol de usuario
  *     security:
  *       - x-access-token: []

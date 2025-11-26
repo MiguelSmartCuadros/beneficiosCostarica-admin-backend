@@ -11,53 +11,6 @@ const typeshopsRouter: Router = Router();
 
 /**
  * @openapi
- * /typeshops/create-typeshop:
- *   post:
- *     tags: [Typeshops]
- *     summary: Crear un nuevo tipo de tienda
- *     security:
- *       - x-access-token: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *               type: object
- *               required:
- *                 - shop_type_name
- *               properties:
- *                   shop_type_name:
- *                       type: string
- *                       description: Nombre del tipo de tienda
- *                       example: "Restaurantes"
- *     responses:
- *       201:
- *         description: Tipo de tienda creado exitosamente
- *         content:
- *           application/json:
- *             schema:
- *                 type: object
- *                 properties:
- *                      message:
- *                          type: string
- *                      typeshop:
- *                          type: object
- *                          properties:
- *                              id_type_shop:
- *                                  type: number
- *                              shop_type_name:
- *                                  type: string
- *       400:
- *         description: Datos de entrada inválidos
- *       409:
- *         description: El tipo de tienda ya existe
- *       500:
- *         description: Error interno del servidor
- */
-typeshopsRouter.post("/create-typeshop", verify_JWT, isAdmin, createTypeshopController);
-
-/**
- * @openapi
  * /typeshops/getall-typeshops:
  *   get:
  *     tags: [Typeshops]
@@ -114,6 +67,53 @@ typeshopsRouter.get("/getall-typeshops", verify_JWT, isAdmin, getAllTypeshopsCon
  *         description: Error interno del servidor
  */
 typeshopsRouter.get("/get-typeshop/:id", verify_JWT, isAdmin, getTypeshopByIdController);
+
+/**
+ * @openapi
+ * /typeshops/create-typeshop:
+ *   post:
+ *     tags: [Typeshops]
+ *     summary: Crear un nuevo tipo de tienda
+ *     security:
+ *       - x-access-token: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *               type: object
+ *               required:
+ *                 - shop_type_name
+ *               properties:
+ *                   shop_type_name:
+ *                       type: string
+ *                       description: Nombre del tipo de tienda
+ *                       example: "Restaurantes"
+ *     responses:
+ *       201:
+ *         description: Tipo de tienda creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      message:
+ *                          type: string
+ *                      typeshop:
+ *                          type: object
+ *                          properties:
+ *                              id_type_shop:
+ *                                  type: number
+ *                              shop_type_name:
+ *                                  type: string
+ *       400:
+ *         description: Datos de entrada inválidos
+ *       409:
+ *         description: El tipo de tienda ya existe
+ *       500:
+ *         description: Error interno del servidor
+ */
+typeshopsRouter.post("/create-typeshop", verify_JWT, isAdmin, createTypeshopController);
 
 /**
  * @openapi

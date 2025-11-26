@@ -11,60 +11,6 @@ const tipoDocumentoIdentidadRouter: Router = Router();
 
 /**
  * @openapi
- * /tipo-documento-identidad/create-tipo-documento-identidad:
- *   post:
- *     tags: [Tipo Documento Identidad]
- *     summary: Crear un nuevo tipo de documento de identidad
- *     security:
- *       - x-access-token: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *               type: object
- *               required:
- *                 - codigo
- *                 - descripcion
- *               properties:
- *                   codigo:
- *                       type: string
- *                       description: Código del tipo de documento
- *                       example: "01"
- *                   descripcion:
- *                       type: string
- *                       description: Descripción del tipo de documento
- *                       example: "Cédula de Identidad"
- *     responses:
- *       201:
- *         description: Tipo de documento creado exitosamente
- *         content:
- *           application/json:
- *             schema:
- *                 type: object
- *                 properties:
- *                      message:
- *                          type: string
- *                      tipoDocumento:
- *                          type: object
- *                          properties:
- *                              id:
- *                                  type: number
- *                              codigo:
- *                                  type: string
- *                              descripcion:
- *                                  type: string
- *       400:
- *         description: Datos de entrada inválidos
- *       409:
- *         description: El código de tipo de documento ya existe
- *       500:
- *         description: Error interno del servidor
- */
-tipoDocumentoIdentidadRouter.post("/create-tipo-documento-identidad", verify_JWT, isAdmin, createTipoDocumentoIdentidadController);
-
-/**
- * @openapi
  * /tipo-documento-identidad/getall-tipo-documento-identidad:
  *   get:
  *     tags: [Tipo Documento Identidad]
@@ -137,6 +83,60 @@ tipoDocumentoIdentidadRouter.get("/getall-tipo-documento-identidad", verify_JWT,
  *         description: Error interno del servidor
  */
 tipoDocumentoIdentidadRouter.get("/get-tipo-documento-identidad/:id", verify_JWT, isAdmin, getTipoDocumentoIdentidadByIdController);
+
+/**
+ * @openapi
+ * /tipo-documento-identidad/create-tipo-documento-identidad:
+ *   post:
+ *     tags: [Tipo Documento Identidad]
+ *     summary: Crear un nuevo tipo de documento de identidad
+ *     security:
+ *       - x-access-token: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *               type: object
+ *               required:
+ *                 - codigo
+ *                 - descripcion
+ *               properties:
+ *                   codigo:
+ *                       type: string
+ *                       description: Código del tipo de documento
+ *                       example: "01"
+ *                   descripcion:
+ *                       type: string
+ *                       description: Descripción del tipo de documento
+ *                       example: "Cédula de Identidad"
+ *     responses:
+ *       201:
+ *         description: Tipo de documento creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      message:
+ *                          type: string
+ *                      tipoDocumento:
+ *                          type: object
+ *                          properties:
+ *                              id:
+ *                                  type: number
+ *                              codigo:
+ *                                  type: string
+ *                              descripcion:
+ *                                  type: string
+ *       400:
+ *         description: Datos de entrada inválidos
+ *       409:
+ *         description: El código de tipo de documento ya existe
+ *       500:
+ *         description: Error interno del servidor
+ */
+tipoDocumentoIdentidadRouter.post("/create-tipo-documento-identidad", verify_JWT, isAdmin, createTipoDocumentoIdentidadController);
 
 /**
  * @openapi

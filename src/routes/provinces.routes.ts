@@ -11,53 +11,6 @@ const provincesRouter: Router = Router();
 
 /**
  * @openapi
- * /provinces/create-province:
- *   post:
- *     tags: [Provincias]
- *     summary: Crear una nueva provincia
- *     security:
- *       - x-access-token: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *               type: object
- *               required:
- *                 - province_name
- *               properties:
- *                   province_name:
- *                       type: string
- *                       description: Nombre de la provincia
- *                       example: "San José"
- *     responses:
- *       201:
- *         description: Provincia creada exitosamente
- *         content:
- *           application/json:
- *             schema:
- *                 type: object
- *                 properties:
- *                      message:
- *                          type: string
- *                      province:
- *                          type: object
- *                          properties:
- *                              id_province:
- *                                  type: number
- *                              province_name:
- *                                  type: string
- *       400:
- *         description: Datos inválidos
- *       409:
- *         description: La provincia ya existe
- *       500:
- *         description: Error interno del servidor
- */
-provincesRouter.post("/create-province", verify_JWT, isAdmin, createProvinceController);
-
-/**
- * @openapi
  * /provinces/getall-provinces:
  *   get:
  *     tags: [Provincias]
@@ -126,6 +79,53 @@ provincesRouter.get("/getall-provinces", verify_JWT, isAdmin, getAllProvincesCon
  *         description: Error interno del servidor
  */
 provincesRouter.get("/get-province/:id", verify_JWT, isAdmin, getProvinceByIdController);
+
+/**
+ * @openapi
+ * /provinces/create-province:
+ *   post:
+ *     tags: [Provincias]
+ *     summary: Crear una nueva provincia
+ *     security:
+ *       - x-access-token: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *               type: object
+ *               required:
+ *                 - province_name
+ *               properties:
+ *                   province_name:
+ *                       type: string
+ *                       description: Nombre de la provincia
+ *                       example: "San José"
+ *     responses:
+ *       201:
+ *         description: Provincia creada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      message:
+ *                          type: string
+ *                      province:
+ *                          type: object
+ *                          properties:
+ *                              id_province:
+ *                                  type: number
+ *                              province_name:
+ *                                  type: string
+ *       400:
+ *         description: Datos inválidos
+ *       409:
+ *         description: La provincia ya existe
+ *       500:
+ *         description: Error interno del servidor
+ */
+provincesRouter.post("/create-province", verify_JWT, isAdmin, createProvinceController);
 
 /**
  * @openapi

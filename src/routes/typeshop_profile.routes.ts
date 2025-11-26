@@ -11,64 +11,6 @@ const typeshopProfileRouter: Router = Router();
 
 /**
  * @openapi
- * /typeshop-profile/create-typeshop-profile:
- *   post:
- *     tags: [Typeshop Profile]
- *     summary: Crear un nuevo perfil de tipo de tienda
- *     security:
- *       - x-access-token: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *               type: object
- *               required:
- *                 - store_id
- *                 - typeshop_id
- *                 - url_store
- *               properties:
- *                   store_id:
- *                       type: number
- *                       description: ID de la tienda
- *                   typeshop_id:
- *                       type: number
- *                       description: ID del tipo de tienda
- *                   url_store:
- *                       type: string
- *                       description: URL de la tienda
- *     responses:
- *       201:
- *         description: Perfil creado exitosamente
- *         content:
- *           application/json:
- *             schema:
- *                 type: object
- *                 properties:
- *                      message:
- *                          type: string
- *                      typeshopProfile:
- *                          type: object
- *                          properties:
- *                              id_typeshop_profile:
- *                                  type: number
- *                              store_id:
- *                                  type: number
- *                              typeshop_id:
- *                                  type: number
- *                              url_store:
- *                                  type: string
- *       400:
- *         description: Datos de entrada inválidos
- *       404:
- *         description: Store o Typeshop no encontrado
- *       500:
- *         description: Error interno del servidor
- */
-typeshopProfileRouter.post("/create-typeshop-profile", verify_JWT, isAdmin, createTypeshopProfileController);
-
-/**
- * @openapi
  * /typeshop-profile/getall-typeshop-profiles:
  *   get:
  *     tags: [Typeshop Profile]
@@ -145,6 +87,64 @@ typeshopProfileRouter.get("/getall-typeshop-profiles", verify_JWT, isAdmin, getA
  *         description: Error interno del servidor
  */
 typeshopProfileRouter.get("/get-typeshop-profile/:id", verify_JWT, isAdmin, getTypeshopProfileByIdController);
+
+/**
+ * @openapi
+ * /typeshop-profile/create-typeshop-profile:
+ *   post:
+ *     tags: [Typeshop Profile]
+ *     summary: Crear un nuevo perfil de tipo de tienda
+ *     security:
+ *       - x-access-token: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *               type: object
+ *               required:
+ *                 - store_id
+ *                 - typeshop_id
+ *                 - url_store
+ *               properties:
+ *                   store_id:
+ *                       type: number
+ *                       description: ID de la tienda
+ *                   typeshop_id:
+ *                       type: number
+ *                       description: ID del tipo de tienda
+ *                   url_store:
+ *                       type: string
+ *                       description: URL de la tienda
+ *     responses:
+ *       201:
+ *         description: Perfil creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                      message:
+ *                          type: string
+ *                      typeshopProfile:
+ *                          type: object
+ *                          properties:
+ *                              id_typeshop_profile:
+ *                                  type: number
+ *                              store_id:
+ *                                  type: number
+ *                              typeshop_id:
+ *                                  type: number
+ *                              url_store:
+ *                                  type: string
+ *       400:
+ *         description: Datos de entrada inválidos
+ *       404:
+ *         description: Store o Typeshop no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ */
+typeshopProfileRouter.post("/create-typeshop-profile", verify_JWT, isAdmin, createTypeshopProfileController);
 
 /**
  * @openapi

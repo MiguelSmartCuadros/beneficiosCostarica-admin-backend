@@ -15,6 +15,48 @@ const definition: OAS3Definition = {
       url: "https://wqk4w3fs-3001.use2.devtunnels.ms/WebServices",
     }
   ],
+  tags: [
+    {
+      name: "ProjectInfo",
+      description: "Información del proyecto"
+    },
+    {
+      name: "AsignedCodesUser",
+      description: "Gestión de códigos asignados a usuarios"
+    },
+    {
+      name: "Autenticacion",
+      description: "Endpoints de autenticación y gestión de usuarios"
+    },
+    {
+      name: "Categorias",
+      description: "Gestión de categorías"
+    },
+    {
+      name: "Provincias",
+      description: "Gestión de provincias"
+    },
+    {
+      name: "Tipo Documento Identidad",
+      description: "Gestión de tipos de documento de identidad"
+    },
+    {
+      name: "Typeshop Profile",
+      description: "Gestión de perfiles de tipo de tienda"
+    },
+    {
+      name: "Typeshops",
+      description: "Gestión de tipos de tienda"
+    },
+    {
+      name: "User Roles",
+      description: "Gestión de roles de usuario"
+    },
+    {
+      name: "Users",
+      description: "Gestión de usuarios"
+    }
+  ],
   components: {
     securitySchemes: {
       "x-access-token": {
