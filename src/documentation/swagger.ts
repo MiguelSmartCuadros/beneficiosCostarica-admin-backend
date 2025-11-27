@@ -55,6 +55,10 @@ const definition: OAS3Definition = {
     {
       name: "Users",
       description: "Gestión de usuarios"
+    },
+    {
+      name: "Stores",
+      description: "Gestión de tiendas"
     }
   ],
   components: {
@@ -97,6 +101,73 @@ const definition: OAS3Definition = {
           },
           enabled: {
             type: "integer",
+          },
+        },
+      },
+      stores: {
+        type: "object",
+        required: [
+          "id_user_responsible",
+          "store_name",
+          "category_id",
+          "shop_type_id",
+          "province_id",
+          "store_img_card",
+          "store_img_highlight",
+          "store_img_banner",
+          "start_date",
+          "end_date"
+        ],
+        properties: {
+          id_user_responsible: {
+            type: "integer",
+            description: "ID del usuario responsable de la tienda",
+          },
+          store_name: {
+            type: "string",
+            description: "Nombre de la tienda",
+            maxLength: 45,
+          },
+          category_id: {
+            type: "integer",
+            description: "ID de la categoría de la tienda",
+          },
+          shop_type_id: {
+            type: "integer",
+            description: "ID del tipo de tienda",
+          },
+          province_id: {
+            type: "integer",
+            description: "ID de la provincia donde se encuentra la tienda",
+          },
+          store_img_card: {
+            type: "string",
+            description: "URL de la imagen de tarjeta de la tienda",
+            maxLength: 150,
+          },
+          store_img_highlight: {
+            type: "string",
+            description: "URL de la imagen destacada de la tienda",
+            maxLength: 150,
+          },
+          store_img_banner: {
+            type: "string",
+            description: "URL de la imagen de banner de la tienda",
+            maxLength: 150,
+          },
+          start_date: {
+            type: "string",
+            format: "date",
+            description: "Fecha de inicio de la promoción (formato: YYYY-MM-DD)",
+          },
+          end_date: {
+            type: "string",
+            format: "date",
+            description: "Fecha de fin de la promoción (formato: YYYY-MM-DD)",
+          },
+          reusable_code: {
+            type: "boolean",
+            description: "Indica si el código es reutilizable",
           },
         },
       },

@@ -10,6 +10,8 @@ import { UserRolesAttributes, UserRolesCreationAttributes } from "../../interfac
 import { UserRoles } from "../../models/UserRoles";
 import { Stores } from "../../models/Stores";
 import { StoresAttributes, StoresCreationAttributes } from "../../interfaces/stores.interface";
+import { UserProfileAttributes, UserProfileCreationAttributes } from "../../interfaces/user_profile.interface";
+import { UserProfile } from "../../models/UserProfile";
 
 export const loginService: (req: Request, res: Response) => Promise<Response> = async (req: Request, res: Response) => {
   try {
@@ -89,36 +91,37 @@ export const loginService: (req: Request, res: Response) => Promise<Response> = 
       sign_token_options
     );
 
-
-    let id_store: number | null = null;
-
-    logger.info(`Login User Role: ${user_role.getDataValue("role")}`);
-
-    if (user_role.getDataValue("role") === "ROLE_CORP") {
-      const store: Model<StoresAttributes, StoresCreationAttributes> | null = await Stores.findOne({
-        where: {
-          id_user_responsible: user.getDataValue("id_user"),
-        },
-      });
-
-      logger.info(`Store found: ${store ? JSON.stringify(store.toJSON()) : "null"}`);
-
-      if (store) {
-        id_store = store.getDataValue("id_stores");
-      }
-    } else {
-      logger.info(`User role is not ROLE_CORP, skipping store lookup.`);
-    }
+    const user_profile: Model<UserProfileAttributes, UserProfileCreationAttributes> | null = await UserProfile.findOne({
+      where: {
+        id: user.getDataValue("id_user"),
+      },
+    });
 
     const responseBody: any = {
       login: true,
       user_role: user_role.getDataValue("role"),
     };
 
-    if (id_store) {
-      responseBody.id_store = id_store;
-    } else if (user_role.getDataValue("role") === "ROLE_CORP") {
-      responseBody.id_store = null;
+    if (user_role.getDataValue("role") === "ROLE_CORP") {
+      let store: Model<StoresAttributes, StoresCreationAttributes> | null = null;
+
+      if (user_profile) {
+        store = await Stores.findOne({
+          where: {
+            id_user_responsible: user_profile.getDataValue("id"),
+          },
+        });
+      }
+
+      logger.info(`Store found: ${store ? JSON.stringify(store.toJSON()) : "null"}`);
+
+      if (store) {
+        responseBody.id_store = store.getDataValue("id_stores");
+      } else {
+        responseBody.id_store = null;
+      }
+    } else {
+      logger.info(`User role is not ROLE_CORP, skipping store lookup.`);
     }
 
     return res

@@ -13,6 +13,7 @@ import { tipoDocumentoIdentidadRouter } from "../routes/tipo_documento_identidad
 import { typeshopProfileRouter } from "../routes/typeshop_profile.routes";
 import { asignedCodesUserRouter } from "../routes/asigned_codes_user.routes";
 import { usersRouter } from "../routes/users.routes";
+import { storesRouter } from "../routes/stores.routes";
 
 const router = Router();
 
@@ -27,6 +28,7 @@ router.use("/tipo-documento-identidad", tipoDocumentoIdentidadRouter);
 router.use("/typeshop-profile", typeshopProfileRouter);
 router.use("/asigned-codes-user", asignedCodesUserRouter);
 router.use("/users", usersRouter);
+router.use("/stores", storesRouter);
 
 router.use("/admin", verify_JWT, isAdmin, (_req: Request, res: Response) => {
   res.status(202).json({
