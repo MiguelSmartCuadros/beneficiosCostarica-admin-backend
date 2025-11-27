@@ -59,6 +59,10 @@ const definition: OAS3Definition = {
     {
       name: "Stores",
       description: "Gestión de tiendas"
+    },
+    {
+      name: "Text Elements",
+      description: "Gestión de elementos de texto de las tiendas"
     }
   ],
   components: {
@@ -168,6 +172,49 @@ const definition: OAS3Definition = {
           reusable_code: {
             type: "boolean",
             description: "Indica si el código es reutilizable",
+          },
+        },
+      },
+      text_elements: {
+        type: "object",
+        required: [
+          "store_id",
+          "discount_description",
+          "terms_conditions"
+        ],
+        properties: {
+          id_text_element: {
+            type: "integer",
+            description: "ID del elemento de texto (generado automáticamente)",
+          },
+          store_id: {
+            type: "integer",
+            description: "ID de la tienda asociada",
+          },
+          discount_description: {
+            type: "string",
+            description: "Descripción del descuento",
+            maxLength: 500,
+          },
+          description: {
+            type: "string",
+            description: "Descripción detallada del elemento",
+            nullable: true,
+          },
+          terms_conditions: {
+            type: "string",
+            description: "Términos y condiciones",
+          },
+          url_terms_conditions: {
+            type: "string",
+            description: "URL de los términos y condiciones",
+            maxLength: 255,
+            nullable: true,
+          },
+          restrictions: {
+            type: "string",
+            description: "Restricciones del beneficio",
+            nullable: true,
           },
         },
       },

@@ -9,6 +9,7 @@ import { Provinces } from "../models/Provinces";
 import { TipoDocumentoIdentidad } from "../models/TipoDocumentoIdentidad";
 import { TypeshopProfile } from "../models/TypeshopProfile";
 import { AsignedCodesUser } from "../models/AsignedCodesUser";
+import { TextElements } from "../models/TextElements";
 import { logger } from "../logger/logger";
 
 Users.belongsTo(UserRoles, {
@@ -135,6 +136,22 @@ Stores.hasMany(AsignedCodesUser, {
   constraints: true,
   foreignKeyConstraint: true,
 });
+
+// Relación entre TextElements y Stores
+TextElements.belongsTo(Stores, {
+  foreignKey: "store_id",
+  targetKey: "id_stores",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+Stores.hasMany(TextElements, {
+  foreignKey: "store_id",
+  sourceKey: "id_stores",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
 
 // Sincroniza los modelos con la base de datos
 export async function modelRelations(): Promise<void> {

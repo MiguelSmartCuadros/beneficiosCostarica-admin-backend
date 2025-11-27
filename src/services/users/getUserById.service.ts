@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Model } from "sequelize";
 import { Users } from "../../models/Users";
+import { UserProfile } from "../../models/UserProfile";
 import { UsersAttributes, UsersCreationAttributes } from "../../interfaces/users.interface";
 import { logger } from "../../logger/logger";
 import { ErrorI } from "../../interfaces/error.interface";
@@ -19,7 +20,14 @@ export const getUserByIdService: (req: Request, res: Response) => Promise<Respon
             throw responseError;
         }
 
-        const user: Model<UsersAttributes, UsersCreationAttributes> | null = await Users.findByPk(Number(id));
+        const user: Model<UsersAttributes, UsersCreationAttributes> | null = await Users.findByPk(Number(id), {
+            include: [
+                {
+                    model: UserProfile,
+                    required: false, // LEFT JOIN - incluye usuario sin perfil
+                }
+            ]
+        });
 
         if (!user) {
             const responseError: ErrorI = {

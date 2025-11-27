@@ -30,7 +30,7 @@ export class App {
         }
     }
 
-    private async settings(): Promise<string>{
+    private async settings(): Promise<string> {
         this.app.set("port", process.env.EXPOSE_PORT || this.port || 3000);
         logger.info(this.app.get("port"));
         this.app.set("pkgjson", pkgjson);
@@ -41,43 +41,42 @@ export class App {
     private corsSettings(): void {
         // Configurar CORS para permitir varios orígenes
         const allowedOrigins = `${process.env.ALLOWED_ORIGINS}`
-        .split(",")
-        .map((origin) => {
-            // const escapedOrigin = origin.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
-            // return new RegExp(`^https?:\\/\\/([a-zA-Z0-9-]+\\.)?${escapedOrigin}(:\\d+)?(\\/.*)?$`);
-            return new RegExp(`${origin}`);
-        });
+            .split(",")
+            .map((origin) => {
+                // const escapedOrigin = origin.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+                // return new RegExp(`^https?:\\/\\/([a-zA-Z0-9-]+\\.)?${escapedOrigin}(:\\d+)?(\\/.*)?$`);
+                return new RegExp(`${origin}`);
+            });
         const corsOptions: cors.CorsOptions = {
-        origin: (
-            origin: string | undefined,
-            callback: (arg0: Error | null, arg1: boolean) => void
-        ) => {
-            const isAllowed = allowedOrigins.some((pattern) =>
-            pattern.test(origin || "")
-            );
-            logger.info(
-            `This origin ${origin} is ${
-                isAllowed || !origin ? "allowed" : "not allowed"
-            }`
-            );
-            if (!origin) return callback(null, true);
-            if (!isAllowed) {
-            return callback(
-                new Error(`Error, Unauthorized by cors origin: ${origin}`),
-                false
-            );
-            }
-            return callback(null, isAllowed);
-        },
-        methods: ["GET", "POST", "OPTIONS"], // Métodos permitidos
-        allowedHeaders: [
-            "Content-Type",
-            "Authorization",
-            "x-access-token",
-            "Websocket_id",
-        ], // Cabeceras permitidas
-        optionsSuccessStatus: 204, // Asegura que las respuestas preflight OPTIONS devuelvan 204
-        maxAge: 86400, // Tiempo de vida del preflight en segundos (1 día)
+            origin: (
+                origin: string | undefined,
+                callback: (arg0: Error | null, arg1: boolean) => void
+            ) => {
+                const isAllowed = allowedOrigins.some((pattern) =>
+                    pattern.test(origin || "")
+                );
+                logger.info(
+                    `This origin ${origin} is ${isAllowed || !origin ? "allowed" : "not allowed"
+                    }`
+                );
+                if (!origin) return callback(null, true);
+                if (!isAllowed) {
+                    return callback(
+                        new Error(`Error, Unauthorized by cors origin: ${origin}`),
+                        false
+                    );
+                }
+                return callback(null, isAllowed);
+            },
+            methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Métodos permitidos
+            allowedHeaders: [
+                "Content-Type",
+                "Authorization",
+                "x-access-token",
+                "Websocket_id",
+            ], // Cabeceras permitidas
+            optionsSuccessStatus: 204, // Asegura que las respuestas preflight OPTIONS devuelvan 204
+            maxAge: 86400, // Tiempo de vida del preflight en segundos (1 día)
         };
         this.app.use(cors(corsOptions));
     }
@@ -87,7 +86,7 @@ export class App {
         return {
             projectName: pkgjson.name,
             projectDescription: pkgjson.description,
-            projectCompany: pkgjson.company,    
+            projectCompany: pkgjson.company,
             projectDeveloper: pkgjson.developer,
             projectDeveloperEmail: pkgjson.email,
             projectVersion: pkgjson.version,
