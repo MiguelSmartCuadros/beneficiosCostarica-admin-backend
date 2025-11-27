@@ -6,6 +6,7 @@ import { updateTextElementController } from "../controllers/text_elements/update
 import { deleteTextElementController } from "../controllers/text_elements/deleteTextElement.controller";
 import { verify_JWT } from "../middlewares/verifyToken";
 import { isAdmin } from "../middlewares/isAdmin";
+import { sanitizeHtmlContent } from "../middlewares/sanitizeHtml";
 
 const textElementsRouter: Router = Router();
 
@@ -112,7 +113,7 @@ textElementsRouter.get("/get-text-element/:id", verify_JWT, isAdmin, getTextElem
  *       500:
  *         description: Error interno del servidor
  */
-textElementsRouter.post("/create-text-element", verify_JWT, isAdmin, createTextElementController);
+textElementsRouter.post("/create-text-element", verify_JWT, isAdmin, sanitizeHtmlContent, createTextElementController);
 
 /**
  * @openapi
@@ -154,7 +155,7 @@ textElementsRouter.post("/create-text-element", verify_JWT, isAdmin, createTextE
  *       500:
  *         description: Error interno del servidor
  */
-textElementsRouter.put("/update-text-element/:id", verify_JWT, isAdmin, updateTextElementController);
+textElementsRouter.put("/update-text-element/:id", verify_JWT, isAdmin, sanitizeHtmlContent, updateTextElementController);
 
 /**
  * @openapi

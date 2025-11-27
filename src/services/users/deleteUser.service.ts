@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
 import { Users } from "../../models/Users";
+import { UserProfile } from "../../models/UserProfile";
 import { logger } from "../../logger/logger";
 import { ErrorI } from "../../interfaces/error.interface";
+import { Transaction } from "sequelize";
+import { dbConnection } from "../../connections/dbConnection";
 
 export const deleteUserService: (req: Request, res: Response) => Promise<Response> = async (req: Request, res: Response) => {
+    let transaction: Transaction | undefined;
     try {
         const { id } = req.params;
 
@@ -29,12 +33,31 @@ export const deleteUserService: (req: Request, res: Response) => Promise<Respons
             throw responseError;
         }
 
-        await user.destroy();
+        // Iniciar transacción
+        transaction = await dbConnection.transaction();
+
+        // Primero eliminar el perfil del usuario (si existe)
+        await UserProfile.destroy({
+            where: { user_id: Number(id) },
+            transaction
+        });
+
+        // Luego eliminar el usuario
+        await user.destroy({ transaction });
+
+        // Confirmar transacción
+        await transaction.commit();
+        transaction = undefined;
 
         return res.status(200).json({
             message: "Usuario eliminado exitosamente",
         });
     } catch (error: any) {
+        // Revertir transacción en caso de error
+        if (transaction) {
+            await transaction.rollback();
+        }
+
         if (error.statusCode) {
             throw error;
         }
