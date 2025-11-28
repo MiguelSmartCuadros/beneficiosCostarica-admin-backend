@@ -15,6 +15,7 @@ import { asignedCodesUserRouter } from "../routes/asigned_codes_user.routes";
 import { usersRouter } from "../routes/users.routes";
 import { storesRouter } from "../routes/stores.routes";
 import { textElementsRouter } from "../routes/text_elements.routes";
+import { provinceXStoreRouter } from "../routes/province_x_store.routes";
 
 const router = Router();
 
@@ -31,6 +32,7 @@ router.use("/asigned-codes-user", asignedCodesUserRouter);
 router.use("/users", usersRouter);
 router.use("/stores", storesRouter);
 router.use("/text-elements", textElementsRouter);
+router.use("/province-x-store", provinceXStoreRouter);
 
 router.use("/admin", verify_JWT, isAdmin, (_req: Request, res: Response) => {
   res.status(202).json({

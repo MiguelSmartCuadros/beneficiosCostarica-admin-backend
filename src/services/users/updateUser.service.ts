@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
-import { Model } from "sequelize";
+import { Model, Transaction } from "sequelize";
 import { Users } from "../../models/Users";
 import { UserProfile } from "../../models/UserProfile";
 import { UsersAttributes, UsersCreationAttributes } from "../../interfaces/users.interface";
 import { logger } from "../../logger/logger";
 import { ErrorI } from "../../interfaces/error.interface";
+import { dbConnection } from "../../connections/dbConnection";
 
 export const updateUserService: (req: Request, res: Response) => Promise<Response> = async (req: Request, res: Response) => {
+    let transaction: Transaction | undefined;
     try {
         const { id } = req.params;
         const {
@@ -49,7 +51,7 @@ export const updateUserService: (req: Request, res: Response) => Promise<Respons
             throw responseError;
         }
 
-        // Check if username is being changed and if it's already taken
+        // Validar username único (si se está cambiando)
         if (username && username !== user.getDataValue("username")) {
             const existingUser = await Users.findOne({ where: { username } });
             if (existingUser) {
@@ -63,7 +65,7 @@ export const updateUserService: (req: Request, res: Response) => Promise<Respons
             }
         }
 
-        // Check if email is being changed and if it's already taken
+        // Validar email único (si se está cambiando)
         if (email) {
             const existingProfile = await UserProfile.findOne({
                 where: { email },
@@ -79,14 +81,33 @@ export const updateUserService: (req: Request, res: Response) => Promise<Respons
             }
         }
 
-        // Update Users fields
+        // Validar numero_doc único (si se está cambiando)
+        if (numero_doc) {
+            const existingDoc = await UserProfile.findOne({
+                where: { numero_doc },
+            });
+            if (existingDoc && existingDoc.getDataValue("user_id") !== Number(id)) {
+                const responseError: ErrorI = {
+                    error: true,
+                    message: "El número de documento ya está en uso",
+                    statusCode: 409,
+                };
+                logger.error(`${responseError.message} | status: 409`);
+                throw responseError;
+            }
+        }
+
+        // Iniciar transacción para garantizar atomicidad
+        transaction = await dbConnection.transaction();
+
+        // Actualizar campos de Users
         if (username !== undefined) user.setDataValue("username", username);
         if (id_user_role !== undefined) user.setDataValue("id_user_role", id_user_role);
         if (enabled !== undefined) user.setDataValue("enabled", enabled);
 
-        await user.save();
+        await user.save({ transaction });
 
-        // Update UserProfile fields if they exist
+        // Actualizar campos de UserProfile si existen
         const userData: any = user.toJSON();
         if (userData.user_profile) {
             const userProfile = await UserProfile.findOne({ where: { user_id: Number(id) } });
@@ -96,11 +117,15 @@ export const updateUserService: (req: Request, res: Response) => Promise<Respons
                 if (nombre_completo !== undefined) userProfile.setDataValue("nombre_completo", nombre_completo);
                 if (email !== undefined) userProfile.setDataValue("email", email);
 
-                await userProfile.save();
+                await userProfile.save({ transaction });
             }
         }
 
-        // Fetch updated user with profile
+        // Confirmar transacción
+        await transaction.commit();
+        transaction = undefined;
+
+        // Obtener usuario actualizado con perfil
         const updatedUser = await Users.findByPk(Number(id), {
             include: [
                 {
@@ -115,6 +140,11 @@ export const updateUserService: (req: Request, res: Response) => Promise<Respons
             user: updatedUser,
         });
     } catch (error: any) {
+        // Rollback de la transacción si hay error
+        if (transaction) {
+            await transaction.rollback();
+        }
+
         if (error.statusCode) {
             throw error;
         }

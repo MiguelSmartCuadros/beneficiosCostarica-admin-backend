@@ -10,6 +10,7 @@ import { TipoDocumentoIdentidad } from "../models/TipoDocumentoIdentidad";
 import { TypeshopProfile } from "../models/TypeshopProfile";
 import { AsignedCodesUser } from "../models/AsignedCodesUser";
 import { TextElements } from "../models/TextElements";
+import { ProvinceXStore } from "../models/ProvinceXStore";
 import { logger } from "../logger/logger";
 
 Users.belongsTo(UserRoles, {
@@ -150,6 +151,51 @@ Stores.hasMany(TextElements, {
   sourceKey: "id_stores",
   constraints: true,
   foreignKeyConstraint: true,
+});
+
+// Relación entre ProvinceXStore y Provinces
+ProvinceXStore.belongsTo(Provinces, {
+  foreignKey: "province_id",
+  targetKey: "id_province",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+Provinces.hasMany(ProvinceXStore, {
+  foreignKey: "province_id",
+  sourceKey: "id_province",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+// Relación entre ProvinceXStore y Stores
+ProvinceXStore.belongsTo(Stores, {
+  foreignKey: "store_id",
+  targetKey: "id_stores",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+Stores.hasMany(ProvinceXStore, {
+  foreignKey: "store_id",
+  sourceKey: "id_stores",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+// Many-to-Many: Provinces <-> Stores through ProvinceXStore
+Provinces.belongsToMany(Stores, {
+  through: ProvinceXStore,
+  foreignKey: "province_id",
+  otherKey: "store_id",
+  as: "associatedStores",
+});
+
+Stores.belongsToMany(Provinces, {
+  through: ProvinceXStore,
+  foreignKey: "store_id",
+  otherKey: "province_id",
+  as: "associatedProvinces",
 });
 
 

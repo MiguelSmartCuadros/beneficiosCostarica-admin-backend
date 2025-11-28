@@ -12,7 +12,7 @@ const storesRouter: Router = Router();
 /**
  * @openapi
  * tags:
- *   name: Stores
+ *   name: stores
  *   description: API para la gestión de tiendas
  */
 
@@ -39,7 +39,7 @@ const storesRouter: Router = Router();
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Store'
+ *                     $ref: '#/components/schemas/stores'
  *       500:
  *         description: Error interno del servidor
  */
@@ -73,7 +73,7 @@ storesRouter.get("/getall-stores", verify_JWT, isAdmin, getAllStoresController);
  *                 message:
  *                   type: string
  *                 data:
- *                   $ref: '#/components/schemas/Store'
+ *                   $ref: '#/components/schemas/stores'
  *       404:
  *         description: Tienda no encontrada
  *       500:
@@ -134,7 +134,7 @@ storesRouter.post("/create-store", verify_JWT, isAdmin, createStoreController);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Store'
+ *             $ref: '#/components/schemas/stores'
  *     responses:
  *       200:
  *         description: Tienda actualizada exitosamente
@@ -148,7 +148,7 @@ storesRouter.post("/create-store", verify_JWT, isAdmin, createStoreController);
  *                 message:
  *                   type: string
  *                 data:
- *                   $ref: '#/components/schemas/Store'
+ *                   $ref: '#/components/schemas/stores'
  *       404:
  *         description: Tienda no encontrada
  *       500:

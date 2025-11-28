@@ -91,7 +91,7 @@ usersRouter.get("/get-user/:id", verify_JWT, isAdmin, getUserByIdController);
  *   put:
  *     tags: [Users]
  *     summary: Actualizar un usuario
- *     description: Permite actualizar username, id_user_role y enabled. No incluye cambio de contraseña.
+ *     description: Permite actualizar cualquier campo del usuario (tabla users) y su perfil (tabla user_profile). Todos los campos son opcionales. Solo los campos proporcionados serán actualizados.
  *     security:
  *       - x-access-token: []
  *     parameters:
@@ -110,13 +110,33 @@ usersRouter.get("/get-user/:id", verify_JWT, isAdmin, getUserByIdController);
  *               properties:
  *                   username:
  *                       type: string
- *                       description: Nuevo nombre de usuario
+ *                       description: Nombre de usuario (debe ser único)
  *                   id_user_role:
  *                       type: number
  *                       description: ID del rol de usuario
  *                   enabled:
  *                       type: number
  *                       description: Estado del usuario (0 = deshabilitado, 1 = habilitado)
+ *                   tipo_documento:
+ *                       type: number
+ *                       description: ID del tipo de documento de identidad
+ *                   numero_doc:
+ *                       type: string
+ *                       description: Número de documento de identidad (debe ser único)
+ *                   nombre_completo:
+ *                       type: string
+ *                       description: Nombre completo del usuario
+ *                   email:
+ *                       type: string
+ *                       description: Email del usuario (debe ser único)
+ *               example:
+ *                   username: "usuario123"
+ *                   id_user_role: 2
+ *                   enabled: 1
+ *                   tipo_documento: 1
+ *                   numero_doc: "123456789"
+ *                   nombre_completo: "Juan Pérez González"
+ *                   email: "juan.perez@example.com"
  *     responses:
  *       200:
  *         description: Usuario actualizado exitosamente
@@ -127,6 +147,7 @@ usersRouter.get("/get-user/:id", verify_JWT, isAdmin, getUserByIdController);
  *                 properties:
  *                      message:
  *                          type: string
+ *                          example: "Usuario actualizado exitosamente"
  *                      user:
  *                          type: object
  *                          properties:
@@ -138,12 +159,27 @@ usersRouter.get("/get-user/:id", verify_JWT, isAdmin, getUserByIdController);
  *                                  type: number
  *                              enabled:
  *                                  type: number
+ *                              user_profile:
+ *                                  type: object
+ *                                  properties:
+ *                                      id:
+ *                                          type: number
+ *                                      tipo_documento:
+ *                                          type: number
+ *                                      numero_doc:
+ *                                          type: string
+ *                                      nombre_completo:
+ *                                          type: string
+ *                                      email:
+ *                                          type: string
+ *                                      user_id:
+ *                                          type: number
  *       400:
- *         description: Datos de entrada inválidos
+ *         description: ID de usuario inválido
  *       404:
  *         description: Usuario no encontrado
  *       409:
- *         description: El nombre de usuario ya está en uso
+ *         description: Username, email o número de documento ya está en uso
  *       500:
  *         description: Error interno del servidor
  */
