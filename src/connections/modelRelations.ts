@@ -11,6 +11,7 @@ import { TypeshopProfile } from "../models/TypeshopProfile";
 import { AsignedCodesUser } from "../models/AsignedCodesUser";
 import { TextElements } from "../models/TextElements";
 import { ProvinceXStore } from "../models/ProvinceXStore";
+import { DiscountCodes } from "../models/DiscountCodes";
 import { logger } from "../logger/logger";
 
 Users.belongsTo(UserRoles, {
@@ -33,6 +34,21 @@ UserProfile.belongsTo(Users, {
   foreignKeyConstraint: true,
 });
 
+// Relación entre UserProfile y TipoDocumentoIdentidad
+UserProfile.belongsTo(TipoDocumentoIdentidad, {
+  foreignKey: "tipo_documento",
+  targetKey: "id_tipo_documento",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+TipoDocumentoIdentidad.hasMany(UserProfile, {
+  foreignKey: "tipo_documento",
+  sourceKey: "id_tipo_documento",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
 // Relación entre Stores y Users (Responsable)
 Stores.belongsTo(Users, {
   foreignKey: "id_user_responsible",
@@ -41,7 +57,7 @@ Stores.belongsTo(Users, {
   foreignKeyConstraint: true,
 });
 
-Users.hasOne(Stores, {
+Users.hasMany(Stores, {
   foreignKey: "id_user_responsible",
   sourceKey: "id_user",
   constraints: true,
@@ -123,6 +139,21 @@ Typeshops.hasMany(TypeshopProfile, {
   foreignKeyConstraint: true,
 });
 
+// Many-to-Many: Stores <-> Typeshops through TypeshopProfile
+Stores.belongsToMany(Typeshops, {
+  through: TypeshopProfile,
+  foreignKey: "store_id",
+  otherKey: "typeshop_id",
+  as: "associatedTypeshops",
+});
+
+Typeshops.belongsToMany(Stores, {
+  through: TypeshopProfile,
+  foreignKey: "typeshop_id",
+  otherKey: "store_id",
+  as: "storesWithThisType",
+});
+
 // Relación entre AsignedCodesUser y Stores
 AsignedCodesUser.belongsTo(Stores, {
   foreignKey: "store_id",
@@ -132,6 +163,21 @@ AsignedCodesUser.belongsTo(Stores, {
 });
 
 Stores.hasMany(AsignedCodesUser, {
+  foreignKey: "store_id",
+  sourceKey: "id_stores",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+// Relación entre DiscountCodes y Stores
+DiscountCodes.belongsTo(Stores, {
+  foreignKey: "store_id",
+  targetKey: "id_stores",
+  constraints: true,
+  foreignKeyConstraint: true,
+});
+
+Stores.hasMany(DiscountCodes, {
   foreignKey: "store_id",
   sourceKey: "id_stores",
   constraints: true,

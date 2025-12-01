@@ -63,6 +63,14 @@ const definition: OAS3Definition = {
     {
       name: "Text Elements",
       description: "Gestión de elementos de texto de las tiendas"
+    },
+    {
+      name: "Discount Codes",
+      description: "Gestión de códigos de descuento"
+    },
+    {
+      name: "Province X Store",
+      description: "Gestión de relaciones entre provincias y tiendas"
     }
   ],
   components: {
@@ -215,6 +223,28 @@ const definition: OAS3Definition = {
             type: "string",
             description: "Restricciones del beneficio",
             nullable: true,
+          },
+        },
+      },
+      discount_codes: {
+        type: "object",
+        required: [
+          "store_id",
+          "codes"
+        ],
+        properties: {
+          id_discout_codes: {
+            type: "integer",
+            description: "ID del código de descuento (generado automáticamente)",
+          },
+          store_id: {
+            type: "integer",
+            description: "ID de la tienda asociada",
+          },
+          codes: {
+            type: "string",
+            description: "Código de descuento",
+            maxLength: 45,
           },
         },
       },
