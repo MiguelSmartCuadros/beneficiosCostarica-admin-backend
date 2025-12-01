@@ -11,7 +11,7 @@ const tipoDocumentoIdentidadRouter: Router = Router();
 
 /**
  * @openapi
- * /tipo-documento-identidad/getall-tipo-documento-identidad:
+ * /document-type/getall-document-types:
  *   get:
  *     tags: [Document Type]
  *     summary: Obtener todos los tipos de documento de identidad
@@ -41,11 +41,11 @@ const tipoDocumentoIdentidadRouter: Router = Router();
  *       500:
  *         description: Error interno del servidor
  */
-tipoDocumentoIdentidadRouter.get("/getall-tipo-documento-identidad", verify_JWT, isAdmin, getAllTipoDocumentoIdentidadController);
+tipoDocumentoIdentidadRouter.get("/getall-document-types", verify_JWT, isAdmin, getAllTipoDocumentoIdentidadController);
 
 /**
  * @openapi
- * /tipo-documento-identidad/get-tipo-documento-identidad/{id}:
+ * /document-type/get-document-type/{id}:
  *   get:
  *     tags: [Document Type]
  *     summary: Obtener un tipo de documento de identidad por su ID
@@ -82,11 +82,11 @@ tipoDocumentoIdentidadRouter.get("/getall-tipo-documento-identidad", verify_JWT,
  *       500:
  *         description: Error interno del servidor
  */
-tipoDocumentoIdentidadRouter.get("/get-tipo-documento-identidad/:id", verify_JWT, isAdmin, getTipoDocumentoIdentidadByIdController);
+tipoDocumentoIdentidadRouter.get("/get-document-type/:id", verify_JWT, isAdmin, getTipoDocumentoIdentidadByIdController);
 
 /**
  * @openapi
- * /tipo-documento-identidad/create-tipo-documento-identidad:
+ * /document-type/create-document-type:
  *   post:
  *     tags: [Document Type]
  *     summary: Crear un nuevo tipo de documento de identidad
@@ -136,11 +136,11 @@ tipoDocumentoIdentidadRouter.get("/get-tipo-documento-identidad/:id", verify_JWT
  *       500:
  *         description: Error interno del servidor
  */
-tipoDocumentoIdentidadRouter.post("/create-tipo-documento-identidad", verify_JWT, isAdmin, createTipoDocumentoIdentidadController);
+tipoDocumentoIdentidadRouter.post("/create-document-type", verify_JWT, isAdmin, createTipoDocumentoIdentidadController);
 
 /**
  * @openapi
- * /tipo-documento-identidad/update-tipo-documento-identidad/{id}:
+ * /document-type/update-document-type/{id}:
  *   put:
  *     tags: [Document Type]
  *     summary: Actualizar un tipo de documento de identidad
@@ -192,11 +192,11 @@ tipoDocumentoIdentidadRouter.post("/create-tipo-documento-identidad", verify_JWT
  *       500:
  *         description: Error interno del servidor
  */
-tipoDocumentoIdentidadRouter.put("/update-tipo-documento-identidad/:id", verify_JWT, isAdmin, updateTipoDocumentoIdentidadController);
+tipoDocumentoIdentidadRouter.put("/update-document-type/:id", verify_JWT, isAdmin, updateTipoDocumentoIdentidadController);
 
 /**
  * @openapi
- * /tipo-documento-identidad/delete-tipo-documento-identidad/{id}:
+ * /document-type/delete-document-type/{id}:
  *   delete:
  *     tags: [Document Type]
  *     summary: Eliminar un tipo de documento de identidad
@@ -226,6 +226,6 @@ tipoDocumentoIdentidadRouter.put("/update-tipo-documento-identidad/:id", verify_
  *       500:
  *         description: Error interno del servidor
  */
-tipoDocumentoIdentidadRouter.delete("/delete-tipo-documento-identidad/:id", verify_JWT, isAdmin, deleteTipoDocumentoIdentidadController);
+tipoDocumentoIdentidadRouter.delete("/delete-document-type/:id", verify_JWT, isAdmin, deleteTipoDocumentoIdentidadController);
 
 export { tipoDocumentoIdentidadRouter };

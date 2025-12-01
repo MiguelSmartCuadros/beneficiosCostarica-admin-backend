@@ -40,7 +40,7 @@ const textElementsRouter: Router = Router();
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/TextElement'
+ *                     $ref: '#/components/schemas/text_elements'
  *       500:
  *         description: Error interno del servidor
  */
@@ -74,7 +74,7 @@ textElementsRouter.get("/getall-text-elements", verify_JWT, isAdmin, getAllTextE
  *                 message:
  *                   type: string
  *                 data:
- *                   $ref: '#/components/schemas/TextElement'
+ *                   $ref: '#/components/schemas/text_elements'
  *       404:
  *         description: Elemento de texto no encontrado
  *       500:
@@ -135,7 +135,7 @@ textElementsRouter.post("/create-text-element", verify_JWT, isAdmin, sanitizeHtm
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/TextElement'
+ *             $ref: '#/components/schemas/text_elements'
  *     responses:
  *       200:
  *         description: Elemento de texto actualizado exitosamente
@@ -149,7 +149,7 @@ textElementsRouter.post("/create-text-element", verify_JWT, isAdmin, sanitizeHtm
  *                 message:
  *                   type: string
  *                 data:
- *                   $ref: '#/components/schemas/TextElement'
+ *                   $ref: '#/components/schemas/text_elements'
  *       404:
  *         description: Elemento de texto no encontrado
  *       500:

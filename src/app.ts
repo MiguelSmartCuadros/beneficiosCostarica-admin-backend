@@ -97,6 +97,20 @@ export class App {
         this.corsSettings();
         this.app.use(morgan("dev"));
         this.app.use(json());
+
+        // Middleware para manejar errores de sintaxis en el JSON (ej: caracteres de control inválidos)
+        this.app.use((err: any, req: Request, res: Response, next: any) => {
+            if (err instanceof SyntaxError && 'status' in err && err.status === 400 && 'body' in err) {
+                logger.error(`Error de sintaxis JSON: ${err.message}`);
+                return res.status(400).json({
+                    error: true,
+                    message: "JSON inválido. Verifique que no haya saltos de línea sin escapar en los strings (especialmente en contenido HTML).",
+                    statusCode: 400
+                });
+            }
+            next();
+        });
+
         this.errorHandlingMiddleware();
     }
 

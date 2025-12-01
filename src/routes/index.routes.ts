@@ -27,7 +27,7 @@ router.use("/categories", categoriesRouter);
 router.use("/typeshops", typeshopsRouter);
 router.use("/provinces", provincesRouter);
 router.use("/user-roles", userRolesRouter);
-router.use("/tipo-documento-identidad", tipoDocumentoIdentidadRouter);
+router.use("/document-type", tipoDocumentoIdentidadRouter);
 router.use("/typeshop-profile", typeshopProfileRouter);
 router.use("/asigned-codes-user", asignedCodesUserRouter);
 router.use("/users", usersRouter);

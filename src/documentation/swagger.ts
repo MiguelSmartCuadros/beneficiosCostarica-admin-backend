@@ -192,10 +192,6 @@ const definition: OAS3Definition = {
           "terms_conditions"
         ],
         properties: {
-          id_text_element: {
-            type: "integer",
-            description: "ID del elemento de texto (generado automáticamente)",
-          },
           store_id: {
             type: "integer",
             description: "ID de la tienda asociada",

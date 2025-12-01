@@ -40,16 +40,18 @@ export const sanitizeHtmlContent = (req: Request, res: Response, next: NextFunct
 
         // Patrones regex adicionales para detectar ataques
         const dangerousPatterns = [
-            /<script[\s\S]*?>[\s\S]*?<\/script>/gi,  // Tags script completos
-            /javascript:/gi,                          // Protocolo javascript
-            /on\w+\s*=/gi,                           // Event handlers (onclick, onerror, etc)
-            /eval\s*\(/gi,                           // Función eval
-            /expression\s*\(/gi,                     // CSS expressions
-            /<iframe[\s\S]*?>/gi,                    // iframes
-            /<object[\s\S]*?>/gi,                    // objects
-            /<embed[\s\S]*?>/gi,                     // embeds
-            /data:text\/html/gi,                     // Data URIs HTML
-            /vbscript:/gi,                           // VBScript
+            /<script\b[^>]*>([\s\S]*?)<\/script>/gim, // Tags script con contenido
+            /<script\b[^>]*\/>/gim,                   // Tags script self-closing
+            /<script\b[^>]*>/gim,                     // Tags script abiertos (sin cerrar)
+            /javascript:/gim,                         // Protocolo javascript
+            /on\w+\s*=/gim,                           // Event handlers (onclick, onerror, etc)
+            /eval\s*\(/gim,                           // Función eval
+            /expression\s*\(/gim,                     // CSS expressions
+            /<iframe\b[^>]*>([\s\S]*?)<\/iframe>/gim, // iframes
+            /<object\b[^>]*>([\s\S]*?)<\/object>/gim, // objects
+            /<embed\b[^>]*>([\s\S]*?)<\/embed>/gim,   // embeds
+            /data:text\/html/gim,                     // Data URIs HTML
+            /vbscript:/gim,                           // VBScript
         ];
 
         // Función para sanitizar un string
@@ -63,9 +65,19 @@ export const sanitizeHtmlContent = (req: Request, res: Response, next: NextFunct
                 sanitized = sanitized.replace(pattern, '');
             });
 
+            // Función para escapar caracteres especiales en regex
+            const escapeRegExp = (string: string) => {
+                return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            };
+
             // Eliminar palabras clave peligrosas (case insensitive)
             dangerousKeywords.forEach(keyword => {
-                const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
+                const escapedKeyword = escapeRegExp(keyword);
+                // Solo usar \b si el keyword empieza/termina con caracteres de palabra
+                const prefix = /^\w/.test(keyword) ? '\\b' : '';
+                const suffix = /\w$/.test(keyword) ? '\\b' : '';
+
+                const regex = new RegExp(`${prefix}${escapedKeyword}${suffix}`, 'gi');
                 sanitized = sanitized.replace(regex, '');
             });
 
@@ -80,11 +92,10 @@ export const sanitizeHtmlContent = (req: Request, res: Response, next: NextFunct
             'discount_description',
             'description',
             'terms_conditions',
-            'restrictions',
-            'url_terms_conditions'
+            'restrictions'
         ];
 
-        // Aplicar sanitización a cada campo
+        // Aplicar sanitización a cada campo HTML
         fieldsToSanitize.forEach(field => {
             if (req.body[field]) {
                 const original = req.body[field];
@@ -96,6 +107,42 @@ export const sanitizeHtmlContent = (req: Request, res: Response, next: NextFunct
                 }
             }
         });
+
+        // Validación específica para url_terms_conditions
+        if (req.body.url_terms_conditions) {
+            const url = req.body.url_terms_conditions;
+
+            // Verificar que sea un string
+            if (typeof url !== 'string') {
+                return res.status(400).json({
+                    error: true,
+                    message: "La URL de términos y condiciones debe ser un texto",
+                    statusCode: 400
+                });
+            }
+
+            // Verificar extensión .pdf y formato básico de URL
+            // Permitimos http://, https:// o rutas relativas que terminen en .pdf
+            const pdfRegex = /\.pdf$/i;
+            // Regex simple para evitar javascript: u otros protocolos peligrosos
+            const dangerousProtocolRegex = /^(javascript|vbscript|data):/i;
+
+            if (!pdfRegex.test(url)) {
+                return res.status(400).json({
+                    error: true,
+                    message: "La URL de términos y condiciones debe ser un archivo PDF (.pdf)",
+                    statusCode: 400
+                });
+            }
+
+            if (dangerousProtocolRegex.test(url)) {
+                return res.status(400).json({
+                    error: true,
+                    message: "Protocolo de URL no permitido",
+                    statusCode: 400
+                });
+            }
+        }
 
         next();
     } catch (error: any) {
