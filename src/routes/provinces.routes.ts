@@ -13,7 +13,7 @@ const provincesRouter: Router = Router();
  * @openapi
  * /provinces/getall-provinces:
  *   get:
- *     tags: [Provincias]
+ *     tags: [Provinces]
  *     summary: Obtener todas las provincias
  *     security:
  *       - x-access-token: []
@@ -45,7 +45,7 @@ provincesRouter.get("/getall-provinces", verify_JWT, isAdmin, getAllProvincesCon
  * @openapi
  * /provinces/get-province/{id}:
  *   get:
- *     tags: [Provincias]
+ *     tags: [Provinces]
  *     summary: Obtener una provincia por su ID
  *     security:
  *       - x-access-token: []
@@ -84,7 +84,7 @@ provincesRouter.get("/get-province/:id", verify_JWT, isAdmin, getProvinceByIdCon
  * @openapi
  * /provinces/create-province:
  *   post:
- *     tags: [Provincias]
+ *     tags: [Provinces]
  *     summary: Crear una nueva provincia
  *     security:
  *       - x-access-token: []
@@ -131,7 +131,7 @@ provincesRouter.post("/create-province", verify_JWT, isAdmin, createProvinceCont
  * @openapi
  * /provinces/update-province/{id}:
  *   put:
- *     tags: [Provincias]
+ *     tags: [Provinces]
  *     summary: Actualizar una provincia
  *     security:
  *       - x-access-token: []
@@ -185,7 +185,7 @@ provincesRouter.put("/update-province/:id", verify_JWT, isAdmin, updateProvinceC
  * @openapi
  * /provinces/delete-province/{id}:
  *   delete:
- *     tags: [Provincias]
+ *     tags: [Provinces]
  *     summary: Eliminar una provincia
  *     security:
  *       - x-access-token: []

@@ -25,11 +25,11 @@ const definition: OAS3Definition = {
       description: "Gestión de códigos asignados a usuarios"
     },
     {
-      name: "Autenticacion",
+      name: "Authentication",
       description: "Endpoints de autenticación y gestión de usuarios"
     },
     {
-      name: "Categorias",
+      name: "Categories",
       description: "Gestión de categorías"
     },
     {
@@ -37,11 +37,15 @@ const definition: OAS3Definition = {
       description: "Gestión de códigos de descuento"
     },
     {
+      name: "Document Type",
+      description: "Gestión de tipos de documento de identidad"
+    },
+    {
       name: "Province X Store",
       description: "Gestión de relaciones entre provincias y tiendas"
     },
     {
-      name: "Provincias",
+      name: "Provinces",
       description: "Gestión de provincias"
     },
     {
@@ -51,10 +55,6 @@ const definition: OAS3Definition = {
     {
       name: "Text Elements",
       description: "Gestión de elementos de texto de las tiendas"
-    },
-    {
-      name: "Tipo Documento Identidad",
-      description: "Gestión de tipos de documento de identidad"
     },
     {
       name: "Typeshop Profile",

@@ -13,7 +13,7 @@ const categoriesRouter: Router = Router();
  * @openapi
  * /categories/getall-categories:
  *   get:
- *     tags: [Categorias]
+ *     tags: [Categories]
  *     summary: Obtener todas las categorías
  *     security:
  *       - x-access-token: []
@@ -57,7 +57,7 @@ categoriesRouter.get("/getall-categories", verify_JWT, isAdmin, getAllCategories
  * @openapi
  * /categories/get-category/{id}:
  *   get:
- *     tags: [Categorias]
+ *     tags: [Categories]
  *     summary: Obtener una categoría por su ID
  *     security:
  *       - x-access-token: []
@@ -129,7 +129,7 @@ categoriesRouter.get("/get-category/:id", verify_JWT, isAdmin, getCategoryByIdCo
  * @openapi
  * /categories/create-category:
  *   post:
- *     tags: [Categorias]
+ *     tags: [Categories]
  *     summary: Crear una nueva categoría
  *     security:
  *       - x-access-token: []
@@ -210,7 +210,7 @@ categoriesRouter.post("/create-category", verify_JWT, isAdmin, createCategoryCon
  * @openapi
  * /categories/update-category/{id}:
  *   put:
- *     tags: [Categorias]
+ *     tags: [Categories]
  *     summary: Actualizar una categoría
  *     security:
  *       - x-access-token: []
@@ -310,7 +310,7 @@ categoriesRouter.put("/update-category/:id", verify_JWT, isAdmin, updateCategory
  * @openapi
  * /categories/delete-category/{id}:
  *   delete:
- *     tags: [Categorias]
+ *     tags: [Categories]
  *     summary: Eliminar una categoría
  *     security:
  *       - x-access-token: []

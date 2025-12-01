@@ -2,7 +2,7 @@ import { Response } from "express";
 import { ErrorI } from "../interfaces/error.interface";
 import { logger } from "../logger/logger";
 
-export const errorResponse = async (error: ErrorI | any, res: Response) => {
+export const errorResponse = async (res: Response, error: ErrorI | any) => {
   try {
     if (
       "error" in error &&

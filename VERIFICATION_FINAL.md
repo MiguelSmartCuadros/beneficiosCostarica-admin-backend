@@ -81,10 +81,10 @@
 
 1. ProjectInfo
 2. AsignedCodesUser
-3. Autenticacion
-4. Categorias
-5. Provincias
-6. Tipo Documento Identidad
+3. Authentication
+4. Categories
+5. Provinces
+6. Document Type
 7. Typeshop Profile
 8. Typeshops
 9. User Roles

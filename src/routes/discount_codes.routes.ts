@@ -11,57 +11,6 @@ const discountCodesRouter: Router = Router();
 
 /**
  * @openapi
- * /discount-codes/create-discount-code:
- *   post:
- *     tags: [Discount Codes]
- *     summary: Crear un nuevo código de descuento
- *     security:
- *       - x-access-token: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - store_id
- *               - codes
- *             properties:
- *               store_id:
- *                 type: integer
- *                 description: ID de la tienda
- *                 example: 1
- *               codes:
- *                 type: string
- *                 description: Código de descuento
- *                 maxLength: 45
- *                 example: "SMARTFIT2025"
- *     responses:
- *       201:
- *         description: Código de descuento creado exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Código de descuento creado exitosamente"
- *                 discountCode:
- *                   $ref: '#/components/schemas/discount_codes'
- *       400:
- *         description: Datos de entrada inválidos o inexistentes
- *       401:
- *         description: Acceso denegado
- *       404:
- *         description: Tienda no encontrada
- *       500:
- *         description: Error interno del servidor
- */
-discountCodesRouter.post("/create-discount-code", verify_JWT, isAdmin, createDiscountCodeController);
-
-/**
- * @openapi
  * /discount-codes/getall-discount-codes:
  *   get:
  *     tags: [Discount Codes]
@@ -144,6 +93,57 @@ discountCodesRouter.get("/getall-discount-codes", verify_JWT, isAdmin, getAllDis
  *         description: Error interno del servidor
  */
 discountCodesRouter.get("/get-discount-code/:id", verify_JWT, isAdmin, getDiscountCodeByIdController);
+
+/**
+ * @openapi
+ * /discount-codes/create-discount-code:
+ *   post:
+ *     tags: [Discount Codes]
+ *     summary: Crear un nuevo código de descuento
+ *     security:
+ *       - x-access-token: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - store_id
+ *               - codes
+ *             properties:
+ *               store_id:
+ *                 type: integer
+ *                 description: ID de la tienda
+ *                 example: 1
+ *               codes:
+ *                 type: string
+ *                 description: Código de descuento
+ *                 maxLength: 45
+ *                 example: "SMARTFIT2025"
+ *     responses:
+ *       201:
+ *         description: Código de descuento creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Código de descuento creado exitosamente"
+ *                 discountCode:
+ *                   $ref: '#/components/schemas/discount_codes'
+ *       400:
+ *         description: Datos de entrada inválidos o inexistentes
+ *       401:
+ *         description: Acceso denegado
+ *       404:
+ *         description: Tienda no encontrada
+ *       500:
+ *         description: Error interno del servidor
+ */
+discountCodesRouter.post("/create-discount-code", verify_JWT, isAdmin, createDiscountCodeController);
 
 /**
  * @openapi

@@ -2,7 +2,7 @@
     "baseUrl": "/WebServices",
     "endpoints": [
         {
-            "category": "Autenticacion",
+            "category": "Authentication",
             "endpoints": [
                 {
                     "method": "GET",
@@ -95,7 +95,7 @@
             ]
         },
         {
-            "category": "Categorias",
+            "category": "Categories",
             "endpoints": [
                 {
                     "method": "POST",
@@ -255,7 +255,7 @@
             ]
         },
         {
-            "category": "Provincias",
+            "category": "Provinces",
             "endpoints": [
                 {
                     "method": "POST",
@@ -415,7 +415,7 @@
             ]
         },
         {
-            "category": "Tipo Documento Identidad",
+            "category": "Document Type",
             "endpoints": [
                 {
                     "method": "POST",

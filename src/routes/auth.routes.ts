@@ -14,7 +14,7 @@ const authRouter: Router = Router();
  * @openapi
  * /auth/verify-token:
  *   get:
- *     tags: [Autenticacion]
+ *     tags: [Authentication]
  *     summary: Verificar token de un usuario
  *     security:
  *       - x-access-token: []
@@ -76,7 +76,7 @@ authRouter.get("/verify-token", verify_JWT, verifyTokenController);
  * @openapi
  * /auth/login:
  *   post:
- *     tags: [Autenticacion]
+ *     tags: [Authentication]
  *     summary: Login de un usuario
  *     requestBody:
  *       required: true
@@ -182,7 +182,7 @@ authRouter.post("/login", loginController);
  * @openapi
  * /auth/signup:
  *   post:
- *     tags: [Autenticacion]
+ *     tags: [Authentication]
  *     summary: Registro de un usuario
  *     description: Permite registrar un nuevo usuario, esta accion solo la puede realizar un usuario logeado
  *     requestBody:
@@ -363,7 +363,7 @@ authRouter.post("/signup", verify_JWT, isAdmin, signupController);
  * @openapi
  * /auth/forgot-password:
  *   post:
- *     tags: [Autenticacion]
+ *     tags: [Authentication]
  *     summary: Solicitar recuperación de contraseña
  *     description: Recibe el username del usuario, genera un token de reseteo de contraseña y envía las instrucciones al correo registrado.
  *     requestBody:
@@ -449,7 +449,7 @@ authRouter.post("/forgot-password", forgotPasswordController);
  * @openapi
  * /auth/reset-password:
  *   post:
- *     tags: [Autenticacion]
+ *     tags: [Authentication]
  *     summary: Resetear contraseña
  *     description: Utiliza el token enviado por email junto con la nueva contraseña. Devuelve un nuevo token JWT listo para iniciar sesión.
  *     requestBody:
@@ -462,9 +462,6 @@ authRouter.post("/forgot-password", forgotPasswordController);
  *                 - token
  *                 - new_password
  *               properties:
- *                 usernameOrEmail:
- *                   type: string
- *                   description: Username o Email del usuario (opcional si se envía username o email por separado)
  *                 username:
  *                   type: string
  *                   description: Username del usuario
@@ -478,7 +475,7 @@ authRouter.post("/forgot-password", forgotPasswordController);
  *                   type: string
  *                   description: Nueva contraseña
  *               example:
- *                 usernameOrEmail: "usuario@examp.com"
+ *                 username: "user.user"
  *                 token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *                 new_password: "NuevaPassword123"
  *     responses:
