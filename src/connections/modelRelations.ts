@@ -37,14 +37,14 @@ UserProfile.belongsTo(Users, {
 // Relación entre UserProfile y TipoDocumentoIdentidad
 UserProfile.belongsTo(TipoDocumentoIdentidad, {
   foreignKey: "tipo_documento",
-  targetKey: "id_tipo_documento",
+  targetKey: "id",
   constraints: true,
   foreignKeyConstraint: true,
 });
 
 TipoDocumentoIdentidad.hasMany(UserProfile, {
   foreignKey: "tipo_documento",
-  sourceKey: "id_tipo_documento",
+  sourceKey: "id",
   constraints: true,
   foreignKeyConstraint: true,
 });

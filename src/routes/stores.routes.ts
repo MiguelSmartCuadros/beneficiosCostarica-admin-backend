@@ -11,13 +11,6 @@ const storesRouter: Router = Router();
 
 /**
  * @openapi
- * tags:
- *   name: stores
- *   description: API para la gestión de tiendas
- */
-
-/**
- * @openapi
  * /stores/getall-stores:
  *   get:
  *     summary: Obtener todas las tiendas

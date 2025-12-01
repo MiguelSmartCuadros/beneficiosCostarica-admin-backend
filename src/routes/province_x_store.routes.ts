@@ -13,7 +13,7 @@ const provinceXStoreRouter: Router = Router();
  * @openapi
  * /province-x-store/getall-province-x-store:
  *   get:
- *     tags: [Provincia X Tienda]
+ *     tags: [Province X Store]
  *     summary: Obtener todas las relaciones provincia-tienda
  *     security:
  *       - x-access-token: []
@@ -78,7 +78,7 @@ provinceXStoreRouter.get("/getall-province-x-store", verify_JWT, isAdmin, getAll
  * @openapi
  * /province-x-store/get-province-x-store/{id}:
  *   get:
- *     tags: [Provincia X Tienda]
+ *     tags: [Province X Store]
  *     summary: Obtener una relación provincia-tienda por su ID
  *     security:
  *       - x-access-token: []
@@ -133,7 +133,7 @@ provinceXStoreRouter.get("/get-province-x-store/:id", verify_JWT, isAdmin, getPr
  * @openapi
  * /province-x-store/create-province-x-store:
  *   post:
- *     tags: [Provincia X Tienda]
+ *     tags: [Province X Store]
  *     summary: Crear una nueva relación provincia-tienda
  *     security:
  *       - x-access-token: []
@@ -187,7 +187,7 @@ provinceXStoreRouter.post("/create-province-x-store", verify_JWT, isAdmin, creat
  * @openapi
  * /province-x-store/update-province-x-store/{id}:
  *   put:
- *     tags: [Provincia X Tienda]
+ *     tags: [Province X Store]
  *     summary: Actualizar una relación provincia-tienda
  *     security:
  *       - x-access-token: []
@@ -245,7 +245,7 @@ provinceXStoreRouter.put("/update-province-x-store/:id", verify_JWT, isAdmin, up
  * @openapi
  * /province-x-store/delete-province-x-store/{id}:
  *   delete:
- *     tags: [Provincia X Tienda]
+ *     tags: [Province X Store]
  *     summary: Eliminar una relación provincia-tienda
  *     security:
  *       - x-access-token: []

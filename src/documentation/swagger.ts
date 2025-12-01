@@ -33,8 +33,24 @@ const definition: OAS3Definition = {
       description: "Gestión de categorías"
     },
     {
+      name: "Discount Codes",
+      description: "Gestión de códigos de descuento"
+    },
+    {
+      name: "Province X Store",
+      description: "Gestión de relaciones entre provincias y tiendas"
+    },
+    {
       name: "Provincias",
       description: "Gestión de provincias"
+    },
+    {
+      name: "Stores",
+      description: "Gestión de tiendas"
+    },
+    {
+      name: "Text Elements",
+      description: "Gestión de elementos de texto de las tiendas"
     },
     {
       name: "Tipo Documento Identidad",
@@ -55,22 +71,6 @@ const definition: OAS3Definition = {
     {
       name: "Users",
       description: "Gestión de usuarios"
-    },
-    {
-      name: "Stores",
-      description: "Gestión de tiendas"
-    },
-    {
-      name: "Text Elements",
-      description: "Gestión de elementos de texto de las tiendas"
-    },
-    {
-      name: "Discount Codes",
-      description: "Gestión de códigos de descuento"
-    },
-    {
-      name: "Province X Store",
-      description: "Gestión de relaciones entre provincias y tiendas"
     }
   ],
   components: {
@@ -128,7 +128,8 @@ const definition: OAS3Definition = {
           "store_img_highlight",
           "store_img_banner",
           "start_date",
-          "end_date"
+          "end_date",
+          "reusable_code"
         ],
         properties: {
           id_user_responsible: {
