@@ -7,6 +7,6 @@ export const updateUserController: Handler = async (req: Request, res: Response)
     try {
         await updateUserService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

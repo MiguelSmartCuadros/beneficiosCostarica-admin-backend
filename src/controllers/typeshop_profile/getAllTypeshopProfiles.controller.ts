@@ -7,6 +7,6 @@ export const getAllTypeshopProfilesController: Handler = async (req: Request, re
     try {
         await getAllTypeshopProfilesService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

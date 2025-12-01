@@ -36,7 +36,7 @@ const storesRouter: Router = Router();
  *       500:
  *         description: Error interno del servidor
  */
-storesRouter.get("/getall-stores", verify_JWT, isAdmin, getAllStoresController);
+storesRouter.get("/getall-stores", getAllStoresController);
 
 /**
  * @openapi
@@ -72,7 +72,7 @@ storesRouter.get("/getall-stores", verify_JWT, isAdmin, getAllStoresController);
  *       500:
  *         description: Error interno del servidor
  */
-storesRouter.get("/get-store/:id", verify_JWT, isAdmin, getStoreByIdController);
+storesRouter.get("/get-store/:id", getStoreByIdController);
 
 /**
  * @openapi

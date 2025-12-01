@@ -7,6 +7,6 @@ export const signupController: Handler = async (req: Request, res: Response) => 
     try {
         await signupService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

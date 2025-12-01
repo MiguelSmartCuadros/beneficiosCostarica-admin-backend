@@ -7,6 +7,6 @@ export const createTipoDocumentoIdentidadController: Handler = async (req: Reque
     try {
         await createTipoDocumentoIdentidadService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

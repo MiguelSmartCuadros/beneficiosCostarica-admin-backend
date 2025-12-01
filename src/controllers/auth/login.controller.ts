@@ -7,6 +7,6 @@ export const loginController: Handler = async (req: Request, res: Response) => {
   try {
     await loginService(req, res);
   } catch (error: ErrorI | any) {
-    errorResponse(error, res);
+    errorResponse(res, error);
   }
 };

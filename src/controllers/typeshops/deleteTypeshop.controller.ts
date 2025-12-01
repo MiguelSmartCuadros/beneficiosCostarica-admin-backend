@@ -7,7 +7,7 @@ export const deleteTypeshopController: Handler = async (req: Request, res: Respo
     try {
         await deleteTypeshopService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

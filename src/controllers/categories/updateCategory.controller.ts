@@ -7,7 +7,7 @@ export const updateCategoryController: Handler = async (req: Request, res: Respo
     try {
         await updateCategoryService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

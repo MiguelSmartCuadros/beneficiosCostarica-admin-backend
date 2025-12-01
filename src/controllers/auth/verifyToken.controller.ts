@@ -7,6 +7,6 @@ export const verifyTokenController: Handler = async (req: Request, res: Response
     try {
         await verifyTokenService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

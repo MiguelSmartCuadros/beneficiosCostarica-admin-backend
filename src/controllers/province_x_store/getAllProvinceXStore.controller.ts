@@ -7,6 +7,6 @@ export const getAllProvinceXStoreController: Handler = async (req: Request, res:
     try {
         await getAllProvinceXStoreService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

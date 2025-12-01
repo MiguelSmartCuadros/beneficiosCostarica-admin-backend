@@ -1,0 +1,5119 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "beneficios-admincr-back-code",
+    "version": "1.0.0",
+    "description": "API para la autenticación de usuarios y la gestión de beneficios para Smart Fit Costa Rica."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/WebServicesSite"
+    },
+    {
+      "url": "https://wqk4w3fs-3001.use2.devtunnels.ms/WebServices"
+    }
+  ],
+  "tags": [
+    {
+      "name": "ProjectInfo",
+      "description": "Información del proyecto"
+    },
+    {
+      "name": "AsignedCodesUser",
+      "description": "Gestión de códigos asignados a usuarios"
+    },
+    {
+      "name": "Authentication",
+      "description": "Endpoints de autenticación y gestión de usuarios"
+    },
+    {
+      "name": "Categories",
+      "description": "Gestión de categorías"
+    },
+    {
+      "name": "Discount Codes",
+      "description": "Gestión de códigos de descuento"
+    },
+    {
+      "name": "Document Type",
+      "description": "Gestión de tipos de documento de identidad"
+    },
+    {
+      "name": "Province X Store",
+      "description": "Gestión de relaciones entre provincias y tiendas"
+    },
+    {
+      "name": "Provinces",
+      "description": "Gestión de provincias"
+    },
+    {
+      "name": "Stores",
+      "description": "Gestión de tiendas"
+    },
+    {
+      "name": "Text Elements",
+      "description": "Gestión de elementos de texto de las tiendas"
+    },
+    {
+      "name": "Typeshop Profile",
+      "description": "Gestión de perfiles de tipo de tienda"
+    },
+    {
+      "name": "Typeshops",
+      "description": "Gestión de tipos de tienda"
+    },
+    {
+      "name": "User Roles",
+      "description": "Gestión de roles de usuario"
+    },
+    {
+      "name": "Users",
+      "description": "Gestión de usuarios"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "x-access-token": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-access-token",
+        "description": "Token de autenticación JWT. Se debe obtener mediante el endpoint /auth/login. Ingrese el token completo sin comillas ni espacios adicionales."
+      }
+    },
+    "schemas": {
+      "user_roles": {
+        "type": "object",
+        "required": [
+          "role"
+        ],
+        "properties": {
+          "user_role_id": {
+            "type": "integer"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "users": {
+        "type": "object",
+        "required": [
+          "username",
+          "password",
+          "id_user_role",
+          "enabled"
+        ],
+        "properties": {
+          "id_user": {
+            "type": "integer"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "id_user_role": {
+            "$ref": "#/components/schemas/user_roles/properties/user_role_id"
+          },
+          "enabled": {
+            "type": "integer"
+          }
+        }
+      },
+      "stores": {
+        "type": "object",
+        "required": [
+          "id_user_responsible",
+          "store_name",
+          "category_id",
+          "shop_type_id",
+          "province_id",
+          "store_img_card",
+          "store_img_highlight",
+          "store_img_banner",
+          "start_date",
+          "end_date",
+          "reusable_code"
+        ],
+        "properties": {
+          "id_user_responsible": {
+            "type": "integer",
+            "description": "ID del usuario responsable de la tienda"
+          },
+          "store_name": {
+            "type": "string",
+            "description": "Nombre de la tienda",
+            "maxLength": 45
+          },
+          "category_id": {
+            "type": "integer",
+            "description": "ID de la categoría de la tienda"
+          },
+          "shop_type_id": {
+            "type": "integer",
+            "description": "ID del tipo de tienda"
+          },
+          "province_id": {
+            "type": "integer",
+            "description": "ID de la provincia donde se encuentra la tienda"
+          },
+          "store_img_card": {
+            "type": "string",
+            "description": "URL de la imagen de tarjeta de la tienda",
+            "maxLength": 150
+          },
+          "store_img_highlight": {
+            "type": "string",
+            "description": "URL de la imagen destacada de la tienda",
+            "maxLength": 150
+          },
+          "store_img_banner": {
+            "type": "string",
+            "description": "URL de la imagen de banner de la tienda",
+            "maxLength": 150
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Fecha de inicio de la promoción (formato: YYYY-MM-DD)"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Fecha de fin de la promoción (formato: YYYY-MM-DD)"
+          },
+          "reusable_code": {
+            "type": "boolean",
+            "description": "Indica si el código es reutilizable"
+          }
+        }
+      },
+      "text_elements": {
+        "type": "object",
+        "required": [
+          "store_id",
+          "discount_description",
+          "terms_conditions"
+        ],
+        "properties": {
+          "store_id": {
+            "type": "integer",
+            "description": "ID de la tienda asociada"
+          },
+          "discount_description": {
+            "type": "string",
+            "description": "Descripción del descuento",
+            "maxLength": 500
+          },
+          "description": {
+            "type": "string",
+            "description": "Descripción detallada del elemento",
+            "nullable": true
+          },
+          "terms_conditions": {
+            "type": "string",
+            "description": "Términos y condiciones"
+          },
+          "url_terms_conditions": {
+            "type": "string",
+            "description": "URL de los términos y condiciones",
+            "maxLength": 255,
+            "nullable": true,
+            "example": "https://example.com/terms.pdf"
+          },
+          "restrictions": {
+            "type": "string",
+            "description": "Restricciones del beneficio",
+            "nullable": true
+          }
+        }
+      },
+      "discount_codes": {
+        "type": "object",
+        "required": [
+          "store_id",
+          "codes"
+        ],
+        "properties": {
+          "id_discout_codes": {
+            "type": "integer",
+            "description": "ID del código de descuento (generado automáticamente)"
+          },
+          "store_id": {
+            "type": "integer",
+            "description": "ID de la tienda asociada"
+          },
+          "codes": {
+            "type": "string",
+            "description": "Código de descuento",
+            "maxLength": 45
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/asigned-codes-user/getall-asigned-codes": {
+      "get": {
+        "tags": [
+          "AsignedCodesUser"
+        ],
+        "summary": "Obtener todos los códigos asignados",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de códigos asignados obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "asigned_codes": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "store_id": {
+                            "type": "number"
+                          },
+                          "code_id": {
+                            "type": "number"
+                          },
+                          "document_number": {
+                            "type": "string"
+                          },
+                          "is_black": {
+                            "type": "number"
+                          },
+                          "date": {
+                            "type": "string",
+                            "format": "date"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "number",
+                      "description": "Total de registros"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/auth/verify-token": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Verificar token de un usuario",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token válido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "validToken": {
+                      "type": "boolean",
+                      "description": "Indica si el token es válido"
+                    },
+                    "user": {
+                      "type": "string",
+                      "description": "Nombre de usuario"
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "x-access-token": {
+                "description": "Token de autenticación de usuario (JWT)",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": "Booleano que indica que hubo un error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Descripción del error"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "description": "Código de error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": "Booleano que indica que hubo un error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Descripción del error"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "description": "Código de error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Login de un usuario",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuario logueado con éxito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "login": {
+                      "type": "boolean",
+                      "description": "Indica si el login fue exitoso"
+                    },
+                    "user_role": {
+                      "type": "string",
+                      "description": "Rol del usuario"
+                    },
+                    "id_store": {
+                      "type": "integer",
+                      "description": "ID de la tienda asociada al usuario (si aplica)"
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "x-access-token": {
+                "description": "Token de autenticación de usuario (JWT)",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos o inexistentes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": "Booleano que indica que hubo un error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Descripción del error"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "description": "Código de error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Password inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": "Booleano que indica que hubo un error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Descripción del error"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "description": "Código de error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": "Booleano que indica que hubo un error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Descripción del error"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "description": "Código de error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": "Booleano que indica que hubo un error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Descripción del error"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "description": "Código de error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Registro de un usuario",
+        "description": "Permite registrar un nuevo usuario, esta accion solo la puede realizar un usuario logeado",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "id_user_role": {
+                    "type": "integer"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "nombre_completo": {
+                    "type": "string"
+                  },
+                  "tipo_documento": {
+                    "type": "integer"
+                  },
+                  "numero_doc": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario registrado con éxito",
+            "headers": {
+              "x-access-token": {
+                "description": "Token de autenticación para el nuevo usuario (JWT)",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Mensaje de confirmación",
+                      "example": "Usuario creado exitosamente"
+                    },
+                    "user": {
+                      "type": "object",
+                      "description": "Datos completos del usuario creado",
+                      "properties": {
+                        "id_user": {
+                          "type": "integer",
+                          "description": "ID único del usuario",
+                          "example": 123
+                        },
+                        "username": {
+                          "type": "string",
+                          "description": "Nombre de usuario",
+                          "example": "front1"
+                        },
+                        "id_user_role": {
+                          "type": "integer",
+                          "description": "ID del rol del usuario",
+                          "example": 2
+                        },
+                        "enabled": {
+                          "type": "integer",
+                          "description": "Estado del usuario (1 = habilitado, 0 = deshabilitado)",
+                          "example": 1
+                        },
+                        "email": {
+                          "type": "string",
+                          "description": "Email del usuario",
+                          "example": "user@examp.com"
+                        },
+                        "nombre_completo": {
+                          "type": "string",
+                          "description": "Nombre completo del usuario",
+                          "example": "Juan Pérez"
+                        },
+                        "tipo_documento": {
+                          "type": "integer",
+                          "description": "Tipo de documento del usuario",
+                          "example": 1
+                        },
+                        "numero_doc": {
+                          "type": "string",
+                          "description": "Número de documento del usuario",
+                          "example": "123456789"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "message": "Usuario creado exitosamente",
+                  "user": {
+                    "id_user": 123,
+                    "username": "front1",
+                    "id_user_role": 2,
+                    "enabled": 1,
+                    "email": "user@examp.com",
+                    "nombre_completo": "Juan Pérez",
+                    "tipo_documento": 1,
+                    "numero_doc": "123456789"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos o inexistentes, o error de validación (id_user_role inválido)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": "Booleano que indica que hubo un error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Descripción del error"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "description": "Código de error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Aceso denegado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": "Booleano que indica que hubo un error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Descripción del error"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "description": "Código de error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicto - El username, email o número de documento ya está en uso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": "Booleano que indica que hubo un error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Mensaje indicando el tipo de conflicto. Puede ser: 'El username X ya está en uso. Por favor, elige otro username.', 'El email X ya está registrado.', o 'El número de documento X ya está registrado.'"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "description": "Código de error (409)"
+                    }
+                  }
+                },
+                "examples": {
+                  "usernameDuplicado": {
+                    "summary": "Username duplicado",
+                    "value": {
+                      "error": true,
+                      "message": "El nombre de usuario o el e-mail ya está en uso. Elige otro.",
+                      "statusCode": 409
+                    }
+                  },
+                  "emailDuplicado": {
+                    "summary": "Email duplicado",
+                    "value": {
+                      "error": true,
+                      "message": "El nombre de usuario o el e-mail ya está en uso. Elige otro.",
+                      "statusCode": 409
+                    }
+                  },
+                  "documentoDuplicado": {
+                    "summary": "Número de documento duplicado",
+                    "value": {
+                      "error": true,
+                      "message": "El número de documento 123456789 ya está registrado.",
+                      "statusCode": 409
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": "Booleano que indica que hubo un error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Descripción del error"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "description": "Código de error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ]
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Solicitar recuperación de contraseña",
+        "description": "Recibe el username del usuario, genera un token de reseteo de contraseña y envía las instrucciones al correo registrado.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "Username del usuario que solicita recuperación"
+                  }
+                },
+                "example": {
+                  "username": "admin"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Solicitud procesada correctamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "requested": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "requested": true,
+                    "message": "Se ha enviado un correo electrónico con las instrucciones para restablecer tu contraseña"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos o inexistentes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "example": {
+                    "error": true,
+                    "message": "Usuario no encontrado",
+                    "statusCode": 404
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  },
+                  "example": {
+                    "error": true,
+                    "message": "Error al procesar la solicitud",
+                    "statusCode": 500
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Resetear contraseña",
+        "description": "Utiliza el token enviado por email junto con la nueva contraseña. Devuelve un nuevo token JWT listo para iniciar sesión.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token",
+                  "new_password"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "Username del usuario"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Email del usuario"
+                  },
+                  "token": {
+                    "type": "string",
+                    "description": "Token de recuperación recibido por email"
+                  },
+                  "new_password": {
+                    "type": "string",
+                    "description": "Nueva contraseña"
+                  }
+                },
+                "example": {
+                  "username": "user.user",
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "new_password": "NuevaPassword123"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contraseña restablecida exitosamente",
+            "headers": {
+              "x-access-token": {
+                "description": "Token de autenticación de usuario (JWT)",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "reset": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "user_role": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "reset": true,
+                    "message": "Contraseña restablecida exitosamente",
+                    "user_role": "admin"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos o inexistentes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token inválido o expirado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuario o rol no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/getall-categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Obtener todas las categorías",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de categorías obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id_category": {
+                            "type": "number"
+                          },
+                          "name_category": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "number",
+                      "description": "Total de categorías"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/get-category/{id}": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Obtener una categoría por su ID",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la categoría"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categoría obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "category": {
+                      "type": "object",
+                      "properties": {
+                        "id_category": {
+                          "type": "number"
+                        },
+                        "name_category": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoría no encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/create-category": {
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Crear una nueva categoría",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name_category"
+                ],
+                "properties": {
+                  "name_category": {
+                    "type": "string",
+                    "description": "Nombre de la categoría",
+                    "example": "Restaurantes"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Categoría creada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Mensaje de éxito"
+                    },
+                    "category": {
+                      "type": "object",
+                      "properties": {
+                        "id_category": {
+                          "type": "number"
+                        },
+                        "name_category": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "La categoría ya existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/update-category/{id}": {
+      "put": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Actualizar una categoría",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la categoría"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name_category"
+                ],
+                "properties": {
+                  "name_category": {
+                    "type": "string",
+                    "description": "Nuevo nombre de la categoría",
+                    "example": "Restaurantes Premium"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Categoría actualizada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "category": {
+                      "type": "object",
+                      "properties": {
+                        "id_category": {
+                          "type": "number"
+                        },
+                        "name_category": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoría no encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "El nombre de categoría ya existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/delete-category/{id}": {
+      "delete": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Eliminar una categoría",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la categoría"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categoría eliminada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoría no encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "No se puede eliminar la categoría porque tiene stores asociados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/discount-codes/getall-discount-codes": {
+      "get": {
+        "tags": [
+          "Discount Codes"
+        ],
+        "summary": "Obtener todos los códigos de descuento",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Número de página"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Cantidad de resultados por página"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de códigos de descuento obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "discountCodes": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/discount_codes"
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total de códigos de descuento"
+                    },
+                    "page": {
+                      "type": "integer",
+                      "description": "Página actual"
+                    },
+                    "totalPages": {
+                      "type": "integer",
+                      "description": "Total de páginas"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Acceso denegado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/discount-codes/get-discount-code/{id}": {
+      "get": {
+        "tags": [
+          "Discount Codes"
+        ],
+        "summary": "Obtener un código de descuento por su ID",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del código de descuento"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Código de descuento obtenido exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "discountCode": {
+                      "$ref": "#/components/schemas/discount_codes"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "401": {
+            "description": "Acceso denegado"
+          },
+          "404": {
+            "description": "Código de descuento no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/discount-codes/create-discount-code": {
+      "post": {
+        "tags": [
+          "Discount Codes"
+        ],
+        "summary": "Crear un nuevo código de descuento",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "store_id",
+                  "codes"
+                ],
+                "properties": {
+                  "store_id": {
+                    "type": "integer",
+                    "description": "ID de la tienda",
+                    "example": 1
+                  },
+                  "codes": {
+                    "type": "string",
+                    "description": "Código de descuento",
+                    "maxLength": 45,
+                    "example": "SMARTFIT2025"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Código de descuento creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Código de descuento creado exitosamente"
+                    },
+                    "discountCode": {
+                      "$ref": "#/components/schemas/discount_codes"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos o inexistentes"
+          },
+          "401": {
+            "description": "Acceso denegado"
+          },
+          "404": {
+            "description": "Tienda no encontrada"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/discount-codes/update-discount-code/{id}": {
+      "put": {
+        "tags": [
+          "Discount Codes"
+        ],
+        "summary": "Actualizar un código de descuento",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del código de descuento"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "store_id": {
+                    "type": "integer",
+                    "description": "ID de la tienda",
+                    "example": 1
+                  },
+                  "codes": {
+                    "type": "string",
+                    "description": "Código de descuento",
+                    "maxLength": 45,
+                    "example": "SMARTFIT2025"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Código de descuento actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Código de descuento actualizado exitosamente"
+                    },
+                    "discountCode": {
+                      "$ref": "#/components/schemas/discount_codes"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "401": {
+            "description": "Acceso denegado"
+          },
+          "404": {
+            "description": "Código de descuento o tienda no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/discount-codes/delete-discount-code/{id}": {
+      "delete": {
+        "tags": [
+          "Discount Codes"
+        ],
+        "summary": "Eliminar un código de descuento",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del código de descuento"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Código de descuento eliminado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Código de descuento eliminado exitosamente"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "401": {
+            "description": "Acceso denegado"
+          },
+          "404": {
+            "description": "Código de descuento no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/projectInfo": {
+      "get": {
+        "tags": [
+          "ProjectInfo"
+        ],
+        "summary": "Obtener la información del proyecto",
+        "description": "Este endpoint permite obtener la información del proyecto, incluyendo la versión y los datos de desarrollo.",
+        "responses": {
+          "200": {
+            "description": "Documentación recuperada con éxito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ProjectName": {
+                      "type": "string",
+                      "description": "Nombre del proyecto"
+                    },
+                    "ProjectDescription": {
+                      "type": "string",
+                      "description": "Descripción del proyecto"
+                    },
+                    "ProjectCompany": {
+                      "type": "string",
+                      "description": "Empresa del proyecto"
+                    },
+                    "ProjectDeveloper": {
+                      "type": "string",
+                      "description": "Desarrollador del proyecto"
+                    },
+                    "ProjectDeveloperEmail": {
+                      "type": "string",
+                      "description": "Correo del desarrollador"
+                    },
+                    "ProjectVersion": {
+                      "type": "string",
+                      "description": "Versión del proyecto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No se pudo obtener la información"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/province-x-store/getall-province-x-store": {
+      "get": {
+        "tags": [
+          "Province X Store"
+        ],
+        "summary": "Obtener todas las relaciones provincia-tienda",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Número de página"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Cantidad de resultados por página"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de relaciones provincia-tienda obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "provinceXStores": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "province_id": {
+                            "type": "number"
+                          },
+                          "store_id": {
+                            "type": "number"
+                          },
+                          "province": {
+                            "type": "object",
+                            "properties": {
+                              "id_province": {
+                                "type": "number"
+                              },
+                              "province_name": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "store": {
+                            "type": "object",
+                            "properties": {
+                              "id_stores": {
+                                "type": "number"
+                              },
+                              "store_name": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "number"
+                    },
+                    "page": {
+                      "type": "number"
+                    },
+                    "totalPages": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/province-x-store/get-province-x-store/{id}": {
+      "get": {
+        "tags": [
+          "Province X Store"
+        ],
+        "summary": "Obtener una relación provincia-tienda por su ID",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la relación provincia-tienda"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Relación provincia-tienda obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "provinceXStore": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "province_id": {
+                          "type": "number"
+                        },
+                        "store_id": {
+                          "type": "number"
+                        },
+                        "province": {
+                          "type": "object",
+                          "properties": {
+                            "id_province": {
+                              "type": "number"
+                            },
+                            "province_name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "store": {
+                          "type": "object",
+                          "properties": {
+                            "id_stores": {
+                              "type": "number"
+                            },
+                            "store_name": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Relación provincia-tienda no encontrada"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/province-x-store/create-province-x-store": {
+      "post": {
+        "tags": [
+          "Province X Store"
+        ],
+        "summary": "Crear una nueva relación provincia-tienda",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "province_id",
+                  "store_id"
+                ],
+                "properties": {
+                  "province_id": {
+                    "type": "number",
+                    "description": "ID de la provincia",
+                    "example": 1
+                  },
+                  "store_id": {
+                    "type": "number",
+                    "description": "ID de la tienda",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Relación provincia-tienda creada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "provinceXStore": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "province_id": {
+                          "type": "number"
+                        },
+                        "store_id": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos"
+          },
+          "409": {
+            "description": "La relación ya existe"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/province-x-store/update-province-x-store/{id}": {
+      "put": {
+        "tags": [
+          "Province X Store"
+        ],
+        "summary": "Actualizar una relación provincia-tienda",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la relación provincia-tienda"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "province_id": {
+                    "type": "number",
+                    "description": "ID de la provincia"
+                  },
+                  "store_id": {
+                    "type": "number",
+                    "description": "ID de la tienda"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Relación provincia-tienda actualizada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "provinceXStore": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "province_id": {
+                          "type": "number"
+                        },
+                        "store_id": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos"
+          },
+          "404": {
+            "description": "Relación provincia-tienda no encontrada"
+          },
+          "409": {
+            "description": "La relación ya existe"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/province-x-store/delete-province-x-store/{id}": {
+      "delete": {
+        "tags": [
+          "Province X Store"
+        ],
+        "summary": "Eliminar una relación provincia-tienda",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la relación provincia-tienda"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Relación provincia-tienda eliminada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "deletedId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Relación provincia-tienda no encontrada"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/provinces/getall-provinces": {
+      "get": {
+        "tags": [
+          "Provinces"
+        ],
+        "summary": "Obtener todas las provincias",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de provincias obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "provinces": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id_province": {
+                            "type": "number"
+                          },
+                          "province_name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/provinces/get-province/{id}": {
+      "get": {
+        "tags": [
+          "Provinces"
+        ],
+        "summary": "Obtener una provincia por su ID",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la provincia"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provincia obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "province": {
+                      "type": "object",
+                      "properties": {
+                        "id_province": {
+                          "type": "number"
+                        },
+                        "province_name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Provincia no encontrada"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/provinces/create-province": {
+      "post": {
+        "tags": [
+          "Provinces"
+        ],
+        "summary": "Crear una nueva provincia",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "province_name"
+                ],
+                "properties": {
+                  "province_name": {
+                    "type": "string",
+                    "description": "Nombre de la provincia",
+                    "example": "San José"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Provincia creada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "province": {
+                      "type": "object",
+                      "properties": {
+                        "id_province": {
+                          "type": "number"
+                        },
+                        "province_name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos"
+          },
+          "409": {
+            "description": "La provincia ya existe"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/provinces/update-province/{id}": {
+      "put": {
+        "tags": [
+          "Provinces"
+        ],
+        "summary": "Actualizar una provincia",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la provincia"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "province_name"
+                ],
+                "properties": {
+                  "province_name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Provincia actualizada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "province": {
+                      "type": "object",
+                      "properties": {
+                        "id_province": {
+                          "type": "number"
+                        },
+                        "province_name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos inválidos"
+          },
+          "404": {
+            "description": "Provincia no encontrada"
+          },
+          "409": {
+            "description": "La provincia ya existe"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/provinces/delete-province/{id}": {
+      "delete": {
+        "tags": [
+          "Provinces"
+        ],
+        "summary": "Eliminar una provincia",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la provincia"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provincia eliminada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Provincia no encontrada"
+          },
+          "409": {
+            "description": "Existen stores asociados"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/stores/getall-stores": {
+      "get": {
+        "summary": "Obtener todas las tiendas",
+        "tags": [
+          "Stores"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tiendas obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/stores"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/stores/get-store/{id}": {
+      "get": {
+        "summary": "Obtener una tienda por su ID",
+        "tags": [
+          "Stores"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID de la tienda"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tienda obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/stores"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tienda no encontrada"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/stores/create-store": {
+      "post": {
+        "summary": "Crear una nueva tienda",
+        "tags": [
+          "Stores"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/stores"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tienda creada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/stores"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/stores/update-store/{id}": {
+      "put": {
+        "summary": "Actualizar una tienda",
+        "tags": [
+          "Stores"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID de la tienda"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/stores"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tienda actualizada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/stores"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tienda no encontrada"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/stores/delete-store/{id}": {
+      "delete": {
+        "summary": "Eliminar una tienda",
+        "tags": [
+          "Stores"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID de la tienda"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tienda eliminada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tienda no encontrada"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/text-elements/getall-text-elements": {
+      "get": {
+        "summary": "Obtener todos los elementos de texto",
+        "tags": [
+          "Text Elements"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de elementos de texto obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/text_elements"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/text-elements/get-text-element/{id}": {
+      "get": {
+        "summary": "Obtener un elemento de texto por su ID",
+        "tags": [
+          "Text Elements"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID del elemento de texto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Elemento de texto obtenido exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/text_elements"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Elemento de texto no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/text-elements/create-text-element": {
+      "post": {
+        "summary": "Crear un nuevo elemento de texto",
+        "tags": [
+          "Text Elements"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/text_elements"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Elemento de texto creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/text_elements"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/text-elements/update-text-element/{id}": {
+      "put": {
+        "summary": "Actualizar un elemento de texto",
+        "tags": [
+          "Text Elements"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID del elemento de texto"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/text_elements"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Elemento de texto actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/text_elements"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Elemento de texto no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/text-elements/delete-text-element/{id}": {
+      "delete": {
+        "summary": "Eliminar un elemento de texto",
+        "tags": [
+          "Text Elements"
+        ],
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID del elemento de texto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Elemento de texto eliminado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Elemento de texto no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/document-type/getall-document-types": {
+      "get": {
+        "tags": [
+          "Document Type"
+        ],
+        "summary": "Obtener todos los tipos de documento de identidad",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de documento obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tiposDocumento": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "codigo": {
+                            "type": "string"
+                          },
+                          "descripcion": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/document-type/get-document-type/{id}": {
+      "get": {
+        "tags": [
+          "Document Type"
+        ],
+        "summary": "Obtener un tipo de documento de identidad por su ID",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del tipo de documento"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de documento obtenido exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tipoDocumento": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "codigo": {
+                          "type": "string"
+                        },
+                        "descripcion": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Tipo de documento no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/document-type/create-document-type": {
+      "post": {
+        "tags": [
+          "Document Type"
+        ],
+        "summary": "Crear un nuevo tipo de documento de identidad",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "codigo",
+                  "descripcion"
+                ],
+                "properties": {
+                  "codigo": {
+                    "type": "string",
+                    "description": "Código del tipo de documento",
+                    "example": "01"
+                  },
+                  "descripcion": {
+                    "type": "string",
+                    "description": "Descripción del tipo de documento",
+                    "example": "Cédula de Identidad"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tipo de documento creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "tipoDocumento": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "codigo": {
+                          "type": "string"
+                        },
+                        "descripcion": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos"
+          },
+          "409": {
+            "description": "El código de tipo de documento ya existe"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/document-type/update-document-type/{id}": {
+      "put": {
+        "tags": [
+          "Document Type"
+        ],
+        "summary": "Actualizar un tipo de documento de identidad",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del tipo de documento"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "codigo": {
+                    "type": "string"
+                  },
+                  "descripcion": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tipo de documento actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "tipoDocumento": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "codigo": {
+                          "type": "string"
+                        },
+                        "descripcion": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos"
+          },
+          "404": {
+            "description": "Tipo de documento no encontrado"
+          },
+          "409": {
+            "description": "El código de tipo de documento ya existe"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/document-type/delete-document-type/{id}": {
+      "delete": {
+        "tags": [
+          "Document Type"
+        ],
+        "summary": "Eliminar un tipo de documento de identidad",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del tipo de documento"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de documento eliminado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Tipo de documento no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/typeshop-profile/getall-typeshop-profiles": {
+      "get": {
+        "tags": [
+          "Typeshop Profile"
+        ],
+        "summary": "Obtener todos los perfiles de tipo de tienda",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de perfiles obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "typeshopProfiles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id_typeshop_profile": {
+                            "type": "number"
+                          },
+                          "store_id": {
+                            "type": "number"
+                          },
+                          "typeshop_id": {
+                            "type": "number"
+                          },
+                          "url_store": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/typeshop-profile/get-typeshop-profile/{id}": {
+      "get": {
+        "tags": [
+          "Typeshop Profile"
+        ],
+        "summary": "Obtener un perfil de tipo de tienda por su ID",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del perfil"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Perfil obtenido exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "typeshopProfile": {
+                      "type": "object",
+                      "properties": {
+                        "id_typeshop_profile": {
+                          "type": "number"
+                        },
+                        "store_id": {
+                          "type": "number"
+                        },
+                        "typeshop_id": {
+                          "type": "number"
+                        },
+                        "url_store": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Perfil no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/typeshop-profile/create-typeshop-profile": {
+      "post": {
+        "tags": [
+          "Typeshop Profile"
+        ],
+        "summary": "Crear un nuevo perfil de tipo de tienda",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "store_id",
+                  "typeshop_id",
+                  "url_store"
+                ],
+                "properties": {
+                  "store_id": {
+                    "type": "number",
+                    "description": "ID de la tienda"
+                  },
+                  "typeshop_id": {
+                    "type": "number",
+                    "description": "ID del tipo de tienda"
+                  },
+                  "url_store": {
+                    "type": "string",
+                    "description": "URL de la tienda"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Perfil creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "typeshopProfile": {
+                      "type": "object",
+                      "properties": {
+                        "id_typeshop_profile": {
+                          "type": "number"
+                        },
+                        "store_id": {
+                          "type": "number"
+                        },
+                        "typeshop_id": {
+                          "type": "number"
+                        },
+                        "url_store": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos"
+          },
+          "404": {
+            "description": "Store o Typeshop no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/typeshop-profile/update-typeshop-profile/{id}": {
+      "put": {
+        "tags": [
+          "Typeshop Profile"
+        ],
+        "summary": "Actualizar un perfil de tipo de tienda",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del perfil"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "store_id": {
+                    "type": "number"
+                  },
+                  "typeshop_id": {
+                    "type": "number"
+                  },
+                  "url_store": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Perfil actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "typeshopProfile": {
+                      "type": "object",
+                      "properties": {
+                        "id_typeshop_profile": {
+                          "type": "number"
+                        },
+                        "store_id": {
+                          "type": "number"
+                        },
+                        "typeshop_id": {
+                          "type": "number"
+                        },
+                        "url_store": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos"
+          },
+          "404": {
+            "description": "Perfil, Store o Typeshop no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/typeshop-profile/delete-typeshop-profile/{id}": {
+      "delete": {
+        "tags": [
+          "Typeshop Profile"
+        ],
+        "summary": "Eliminar un perfil de tipo de tienda",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del perfil"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Perfil eliminado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Perfil no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/typeshops/getall-typeshops": {
+      "get": {
+        "tags": [
+          "Typeshops"
+        ],
+        "summary": "Obtener todos los tipos de tienda",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de tienda obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "typeshops": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id_type_shop": {
+                            "type": "number"
+                          },
+                          "shop_type_name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/typeshops/get-typeshop/{id}": {
+      "get": {
+        "tags": [
+          "Typeshops"
+        ],
+        "summary": "Obtener un tipo de tienda por su ID",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del tipo de tienda"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de tienda obtenido exitosamente"
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Tipo de tienda no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/typeshops/create-typeshop": {
+      "post": {
+        "tags": [
+          "Typeshops"
+        ],
+        "summary": "Crear un nuevo tipo de tienda",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "shop_type_name"
+                ],
+                "properties": {
+                  "shop_type_name": {
+                    "type": "string",
+                    "description": "Nombre del tipo de tienda",
+                    "example": "Restaurantes"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tipo de tienda creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "typeshop": {
+                      "type": "object",
+                      "properties": {
+                        "id_type_shop": {
+                          "type": "number"
+                        },
+                        "shop_type_name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos"
+          },
+          "409": {
+            "description": "El tipo de tienda ya existe"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/typeshops/update-typeshop/{id}": {
+      "put": {
+        "tags": [
+          "Typeshops"
+        ],
+        "summary": "Actualizar un tipo de tienda",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del tipo de tienda"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "shop_type_name"
+                ],
+                "properties": {
+                  "shop_type_name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tipo de tienda actualizado exitosamente"
+          },
+          "400": {
+            "description": "Datos de entrada inválidos"
+          },
+          "404": {
+            "description": "Tipo de tienda no encontrado"
+          },
+          "409": {
+            "description": "El nombre ya existe"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/typeshops/delete-typeshop/{id}": {
+      "delete": {
+        "tags": [
+          "Typeshops"
+        ],
+        "summary": "Eliminar un tipo de tienda",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del tipo de tienda"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de tienda eliminado exitosamente"
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Tipo de tienda no encontrado"
+          },
+          "409": {
+            "description": "Existen stores asociados"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/user-roles/getall-user-roles": {
+      "get": {
+        "tags": [
+          "User Roles"
+        ],
+        "summary": "Obtener todos los roles de usuario",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de roles de usuario obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userRoles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "user_role_id": {
+                            "type": "number"
+                          },
+                          "role": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "number",
+                      "description": "Total de roles de usuario"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user-roles/get-user-role/{id}": {
+      "get": {
+        "tags": [
+          "User Roles"
+        ],
+        "summary": "Obtener un rol de usuario por su ID",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del rol de usuario"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rol de usuario obtenido exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userRole": {
+                      "type": "object",
+                      "properties": {
+                        "user_role_id": {
+                          "type": "number"
+                        },
+                        "role": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rol de usuario no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user-roles/create-user-role": {
+      "post": {
+        "tags": [
+          "User Roles"
+        ],
+        "summary": "Crear un nuevo rol de usuario",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "role"
+                ],
+                "properties": {
+                  "role": {
+                    "type": "string",
+                    "description": "Nombre del rol de usuario",
+                    "example": "ROLE_ADMIN"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Rol de usuario creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Mensaje de éxito"
+                    },
+                    "userRole": {
+                      "type": "object",
+                      "properties": {
+                        "user_role_id": {
+                          "type": "number"
+                        },
+                        "role": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "El rol ya existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user-roles/update-user-role/{id}": {
+      "put": {
+        "tags": [
+          "User Roles"
+        ],
+        "summary": "Actualizar un rol de usuario",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del rol de usuario"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "role"
+                ],
+                "properties": {
+                  "role": {
+                    "type": "string",
+                    "description": "Nuevo nombre del rol de usuario",
+                    "example": "ROLE_ADMIN"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rol de usuario actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "userRole": {
+                      "type": "object",
+                      "properties": {
+                        "user_role_id": {
+                          "type": "number"
+                        },
+                        "role": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de entrada inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rol de usuario no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "El nombre de rol ya existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user-roles/delete-user-role/{id}": {
+      "delete": {
+        "tags": [
+          "User Roles"
+        ],
+        "summary": "Eliminar un rol de usuario",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del rol de usuario"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rol de usuario eliminado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rol de usuario no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "No se puede eliminar el rol porque tiene usuarios asociados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/getall-users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Obtener todos los usuarios",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de usuarios obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id_user": {
+                            "type": "number"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "id_user_role": {
+                            "type": "number"
+                          },
+                          "enabled": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/users/get-user/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Obtener un usuario por su ID",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del usuario"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario obtenido exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id_user": {
+                          "type": "number"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "id_user_role": {
+                          "type": "number"
+                        },
+                        "enabled": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/users/update-user/{id}": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Actualizar un usuario",
+        "description": "Permite actualizar cualquier campo del usuario (tabla users) y su perfil (tabla user_profile). Todos los campos son opcionales. Solo los campos proporcionados serán actualizados.",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del usuario"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "Nombre de usuario (debe ser único)"
+                  },
+                  "id_user_role": {
+                    "type": "number",
+                    "description": "ID del rol de usuario"
+                  },
+                  "enabled": {
+                    "type": "number",
+                    "description": "Estado del usuario (0 = deshabilitado, 1 = habilitado)"
+                  },
+                  "tipo_documento": {
+                    "type": "number",
+                    "description": "ID del tipo de documento de identidad"
+                  },
+                  "numero_doc": {
+                    "type": "string",
+                    "description": "Número de documento de identidad (debe ser único)"
+                  },
+                  "nombre_completo": {
+                    "type": "string",
+                    "description": "Nombre completo del usuario"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Email del usuario (debe ser único)"
+                  }
+                },
+                "example": {
+                  "username": "usuario123",
+                  "id_user_role": 2,
+                  "enabled": 1,
+                  "tipo_documento": 1,
+                  "numero_doc": "123456789",
+                  "nombre_completo": "Juan Pérez González",
+                  "email": "juan.perez@example.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuario actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Usuario actualizado exitosamente"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id_user": {
+                          "type": "number"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "id_user_role": {
+                          "type": "number"
+                        },
+                        "enabled": {
+                          "type": "number"
+                        },
+                        "user_profile": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number"
+                            },
+                            "tipo_documento": {
+                              "type": "number"
+                            },
+                            "numero_doc": {
+                              "type": "string"
+                            },
+                            "nombre_completo": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "user_id": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID de usuario inválido"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          },
+          "409": {
+            "description": "Username, email o número de documento ya está en uso"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/users/delete-user/{id}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Eliminar un usuario",
+        "security": [
+          {
+            "x-access-token": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del usuario"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario eliminado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID inválido"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
+          }
+        }
+      }
+    }
+  }
+}

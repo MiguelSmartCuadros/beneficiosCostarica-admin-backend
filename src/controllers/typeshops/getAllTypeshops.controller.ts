@@ -7,7 +7,7 @@ export const getAllTypeshopsController: Handler = async (req: Request, res: Resp
     try {
         await getAllTypeshopsService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

@@ -7,6 +7,6 @@ export const deleteTipoDocumentoIdentidadController: Handler = async (req: Reque
     try {
         await deleteTipoDocumentoIdentidadService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

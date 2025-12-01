@@ -7,7 +7,7 @@ export const getCategoryByIdController: Handler = async (req: Request, res: Resp
     try {
         await getCategoryByIdService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

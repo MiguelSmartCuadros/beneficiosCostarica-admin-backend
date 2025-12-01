@@ -7,7 +7,7 @@ export const deleteProvinceController: Handler = async (req: Request, res: Respo
     try {
         await deleteProvinceService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

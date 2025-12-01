@@ -7,7 +7,7 @@ export const createProvinceController: Handler = async (req: Request, res: Respo
     try {
         await createProvinceService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

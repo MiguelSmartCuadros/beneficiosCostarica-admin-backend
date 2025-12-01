@@ -7,6 +7,6 @@ export const getAllAsignedCodesUserController: Handler = async (req: Request, re
     try {
         await getAllAsignedCodesUserService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

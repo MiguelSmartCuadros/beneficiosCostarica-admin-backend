@@ -24,6 +24,6 @@ export const resetPasswordController: Handler = async (req: Request, res: Respon
         }
         await resetPasswordService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

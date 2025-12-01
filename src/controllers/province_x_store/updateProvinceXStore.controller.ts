@@ -7,6 +7,6 @@ export const updateProvinceXStoreController: Handler = async (req: Request, res:
     try {
         await updateProvinceXStoreService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

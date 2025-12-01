@@ -215,6 +215,7 @@ const definition: OAS3Definition = {
             description: "URL de los términos y condiciones",
             maxLength: 255,
             nullable: true,
+            example: "https://example.com/terms.pdf"
           },
           restrictions: {
             type: "string",

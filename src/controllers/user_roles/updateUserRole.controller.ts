@@ -7,7 +7,7 @@ export const updateUserRoleController: Handler = async (req: Request, res: Respo
     try {
         await updateUserRoleService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

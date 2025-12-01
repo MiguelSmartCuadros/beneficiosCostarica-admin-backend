@@ -7,7 +7,7 @@ export const getAllUserRolesController: Handler = async (req: Request, res: Resp
     try {
         await getAllUserRolesService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

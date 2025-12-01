@@ -7,7 +7,7 @@ export const getAllCategoriesController: Handler = async (req: Request, res: Res
     try {
         await getAllCategoriesService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

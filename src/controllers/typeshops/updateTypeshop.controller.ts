@@ -7,7 +7,7 @@ export const updateTypeshopController: Handler = async (req: Request, res: Respo
     try {
         await updateTypeshopService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

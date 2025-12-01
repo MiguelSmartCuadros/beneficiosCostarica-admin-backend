@@ -7,7 +7,7 @@ export const getProvinceByIdController: Handler = async (req: Request, res: Resp
     try {
         await getProvinceByIdService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

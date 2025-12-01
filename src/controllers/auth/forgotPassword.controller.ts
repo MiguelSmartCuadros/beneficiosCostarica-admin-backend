@@ -17,7 +17,7 @@ export const forgotPasswordController: Handler = async (req: Request, res: Respo
 
         return await forgotPasswordService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

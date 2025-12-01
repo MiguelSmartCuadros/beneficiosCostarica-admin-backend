@@ -7,6 +7,6 @@ export const deleteUserController: Handler = async (req: Request, res: Response)
     try {
         await deleteUserService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

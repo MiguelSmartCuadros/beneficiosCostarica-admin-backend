@@ -7,7 +7,7 @@ export const getUserRoleByIdController: Handler = async (req: Request, res: Resp
     try {
         await getUserRoleByIdService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
 

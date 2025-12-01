@@ -7,6 +7,6 @@ export const getAllUsersController: Handler = async (req: Request, res: Response
     try {
         await getAllUsersService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

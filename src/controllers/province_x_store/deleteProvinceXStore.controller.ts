@@ -7,6 +7,6 @@ export const deleteProvinceXStoreController: Handler = async (req: Request, res:
     try {
         await deleteProvinceXStoreService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

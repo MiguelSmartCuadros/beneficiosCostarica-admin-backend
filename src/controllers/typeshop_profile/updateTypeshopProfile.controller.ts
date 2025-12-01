@@ -7,6 +7,6 @@ export const updateTypeshopProfileController: Handler = async (req: Request, res
     try {
         await updateTypeshopProfileService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };

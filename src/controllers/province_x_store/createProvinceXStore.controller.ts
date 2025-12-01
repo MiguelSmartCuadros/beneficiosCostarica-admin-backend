@@ -7,6 +7,6 @@ export const createProvinceXStoreController: Handler = async (req: Request, res:
     try {
         await createProvinceXStoreService(req, res);
     } catch (error: ErrorI | any) {
-        errorResponse(error, res);
+        errorResponse(res, error);
     }
 };
