@@ -15,8 +15,8 @@ export const TextElements = dbConnection.define(
             allowNull: false,
         },
         discount_description: {
-            type: DataTypes.STRING(500),
-            allowNull: false,
+            type: DataTypes.TEXT("long"),
+            allowNull: true,
         },
         description: {
             type: DataTypes.TEXT("long"),

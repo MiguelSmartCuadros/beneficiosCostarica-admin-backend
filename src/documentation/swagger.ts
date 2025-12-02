@@ -57,8 +57,8 @@ const definition: OAS3Definition = {
       description: "Gestión de elementos de texto de las tiendas"
     },
     {
-      name: "Typeshop Profile",
-      description: "Gestión de perfiles de tipo de tienda"
+      name: "Typeshop Urls",
+      description: "Gestión de URLs de tipo de tienda"
     },
     {
       name: "Typeshops",
@@ -199,7 +199,7 @@ const definition: OAS3Definition = {
           discount_description: {
             type: "string",
             description: "Descripción del descuento",
-            maxLength: 500,
+            nullable: true,
           },
           description: {
             type: "string",

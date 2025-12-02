@@ -7,7 +7,7 @@ import { Stores } from "../models/Stores";
 import { Typeshops } from "../models/Typeshops";
 import { Provinces } from "../models/Provinces";
 import { TipoDocumentoIdentidad } from "../models/TipoDocumentoIdentidad";
-import { TypeshopProfile } from "../models/TypeshopProfile";
+import { TypeshopUrls } from "../models/TypeshopUrls";
 import { AsignedCodesUser } from "../models/AsignedCodesUser";
 import { TextElements } from "../models/TextElements";
 import { ProvinceXStore } from "../models/ProvinceXStore";
@@ -109,46 +109,17 @@ Provinces.hasMany(Stores, {
   foreignKeyConstraint: true,
 });
 
-// Relación entre TypeshopProfile y Stores
-TypeshopProfile.belongsTo(Stores, {
-  foreignKey: "store_id",
-  targetKey: "id_stores",
-  constraints: true,
-  foreignKeyConstraint: true,
-});
 
-Stores.hasMany(TypeshopProfile, {
-  foreignKey: "store_id",
-  sourceKey: "id_stores",
-  constraints: true,
-  foreignKeyConstraint: true,
-});
-
-// Relación entre TypeshopProfile y Typeshops
-TypeshopProfile.belongsTo(Typeshops, {
-  foreignKey: "typeshop_id",
-  targetKey: "id_type_shop",
-  constraints: true,
-  foreignKeyConstraint: true,
-});
-
-Typeshops.hasMany(TypeshopProfile, {
-  foreignKey: "typeshop_id",
-  sourceKey: "id_type_shop",
-  constraints: true,
-  foreignKeyConstraint: true,
-});
-
-// Many-to-Many: Stores <-> Typeshops through TypeshopProfile
+// Many-to-Many: Stores <-> Typeshops through TypeshopUrls
 Stores.belongsToMany(Typeshops, {
-  through: TypeshopProfile,
+  through: TypeshopUrls,
   foreignKey: "store_id",
   otherKey: "typeshop_id",
   as: "associatedTypeshops",
 });
 
 Typeshops.belongsToMany(Stores, {
-  through: TypeshopProfile,
+  through: TypeshopUrls,
   foreignKey: "typeshop_id",
   otherKey: "store_id",
   as: "storesWithThisType",

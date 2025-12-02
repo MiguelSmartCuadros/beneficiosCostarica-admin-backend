@@ -1,10 +1,10 @@
 import { DataTypes } from "sequelize";
 import { dbConnection } from "../connections/dbConnection";
 
-export const TypeshopProfile = dbConnection.define(
-    "typeshop_profile",
+export const TypeshopUrls = dbConnection.define(
+    "typeshop_urls",
     {
-        id_typeshop_profile: {
+        id_typeshop_urls: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
@@ -25,6 +25,6 @@ export const TypeshopProfile = dbConnection.define(
     },
     {
         timestamps: false,
-        tableName: "typeshop_profile",
+        tableName: "typeshop_urls",
     }
 );

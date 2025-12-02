@@ -1,11 +1,11 @@
 import { Request, Response, Handler } from "express";
-import { getTypeshopProfileByIdService } from "../../services/typeshop_profile/getTypeshopProfileById.service";
+import { getTypeshopUrlsByIdService } from "../../services/typeshop_urls/getTypeshopUrlsById.service";
 import { ErrorI } from "../../interfaces/error.interface";
 import { errorResponse } from "../../services/error.service";
 
-export const getTypeshopProfileByIdController: Handler = async (req: Request, res: Response) => {
+export const getTypeshopUrlsByIdController: Handler = async (req: Request, res: Response) => {
     try {
-        await getTypeshopProfileByIdService(req, res);
+        await getTypeshopUrlsByIdService(req, res);
     } catch (error: ErrorI | any) {
         errorResponse(res, error);
     }

@@ -1,36 +1,36 @@
 import { Router } from "express";
-import { createTypeshopProfileController } from "../controllers/typeshop_profile/createTypeshopProfile.controller";
-import { getAllTypeshopProfilesController } from "../controllers/typeshop_profile/getAllTypeshopProfiles.controller";
-import { getTypeshopProfileByIdController } from "../controllers/typeshop_profile/getTypeshopProfileById.controller";
-import { updateTypeshopProfileController } from "../controllers/typeshop_profile/updateTypeshopProfile.controller";
-import { deleteTypeshopProfileController } from "../controllers/typeshop_profile/deleteTypeshopProfile.controller";
+import { createTypeshopUrlsController } from "../controllers/typeshop_urls/createTypeshopUrls.controller";
+import { getAllTypeshopUrlsController } from "../controllers/typeshop_urls/getAllTypeshopUrls.controller";
+import { getTypeshopUrlsByIdController } from "../controllers/typeshop_urls/getTypeshopUrlsById.controller";
+import { updateTypeshopUrlsController } from "../controllers/typeshop_urls/updateTypeshopUrls.controller";
+import { deleteTypeshopUrlsController } from "../controllers/typeshop_urls/deleteTypeshopUrls.controller";
 import { verify_JWT } from "../middlewares/verifyToken";
 import { isAdmin } from "../middlewares/isAdmin";
 
-const typeshopProfileRouter: Router = Router();
+const typeshopUrlsRouter: Router = Router();
 
 /**
  * @openapi
- * /typeshop-profile/getall-typeshop-profiles:
+ * /typeshop-urls/getall-typeshop-urls:
  *   get:
- *     tags: [Typeshop Profile]
- *     summary: Obtener todos los perfiles de tipo de tienda
+ *     tags: [Typeshop Urls]
+ *     summary: Obtener todas las URLs de tipo de tienda
  *     security:
  *       - x-access-token: []
  *     responses:
  *       200:
- *         description: Lista de perfiles obtenida exitosamente
+ *         description: Lista de URLs obtenida exitosamente
  *         content:
  *           application/json:
  *             schema:
  *                 type: object
  *                 properties:
- *                      typeshopProfiles:
+ *                      typeshopUrls:
  *                          type: array
  *                          items:
  *                              type: object
  *                              properties:
- *                                  id_typeshop_profile:
+ *                                  id_typeshop_urls:
  *                                      type: number
  *                                  store_id:
  *                                      type: number
@@ -43,14 +43,14 @@ const typeshopProfileRouter: Router = Router();
  *       500:
  *         description: Error interno del servidor
  */
-typeshopProfileRouter.get("/getall-typeshop-profiles", verify_JWT, isAdmin, getAllTypeshopProfilesController);
+typeshopUrlsRouter.get("/getall-typeshop-urls", verify_JWT, isAdmin, getAllTypeshopUrlsController);
 
 /**
  * @openapi
- * /typeshop-profile/get-typeshop-profile/{id}:
+ * /typeshop-urls/get-typeshop-urls/{id}:
  *   get:
- *     tags: [Typeshop Profile]
- *     summary: Obtener un perfil de tipo de tienda por su ID
+ *     tags: [Typeshop Urls]
+ *     summary: Obtener una URL de tipo de tienda por su ID
  *     security:
  *       - x-access-token: []
  *     parameters:
@@ -59,19 +59,19 @@ typeshopProfileRouter.get("/getall-typeshop-profiles", verify_JWT, isAdmin, getA
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID del perfil
+ *         description: ID de la URL
  *     responses:
  *       200:
- *         description: Perfil obtenido exitosamente
+ *         description: URL obtenida exitosamente
  *         content:
  *           application/json:
  *             schema:
  *                 type: object
  *                 properties:
- *                      typeshopProfile:
+ *                      typeshopUrls:
  *                          type: object
  *                          properties:
- *                              id_typeshop_profile:
+ *                              id_typeshop_urls:
  *                                  type: number
  *                              store_id:
  *                                  type: number
@@ -82,18 +82,18 @@ typeshopProfileRouter.get("/getall-typeshop-profiles", verify_JWT, isAdmin, getA
  *       400:
  *         description: ID inválido
  *       404:
- *         description: Perfil no encontrado
+ *         description: URL no encontrada
  *       500:
  *         description: Error interno del servidor
  */
-typeshopProfileRouter.get("/get-typeshop-profile/:id", verify_JWT, isAdmin, getTypeshopProfileByIdController);
+typeshopUrlsRouter.get("/get-typeshop-urls/:id", verify_JWT, isAdmin, getTypeshopUrlsByIdController);
 
 /**
  * @openapi
- * /typeshop-profile/create-typeshop-profile:
+ * /typeshop-urls/create-typeshop-urls:
  *   post:
- *     tags: [Typeshop Profile]
- *     summary: Crear un nuevo perfil de tipo de tienda
+ *     tags: [Typeshop Urls]
+ *     summary: Crear una nueva URL de tipo de tienda
  *     security:
  *       - x-access-token: []
  *     requestBody:
@@ -105,7 +105,7 @@ typeshopProfileRouter.get("/get-typeshop-profile/:id", verify_JWT, isAdmin, getT
  *               required:
  *                 - store_id
  *                 - typeshop_id
- *                 - url_store
+ *                 - url
  *               properties:
  *                   store_id:
  *                       type: number
@@ -118,7 +118,7 @@ typeshopProfileRouter.get("/get-typeshop-profile/:id", verify_JWT, isAdmin, getT
  *                       description: URL de la tienda
  *     responses:
  *       201:
- *         description: Perfil creado exitosamente
+ *         description: URL creada exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -126,10 +126,10 @@ typeshopProfileRouter.get("/get-typeshop-profile/:id", verify_JWT, isAdmin, getT
  *                 properties:
  *                      message:
  *                          type: string
- *                      typeshopProfile:
+ *                      typeshopUrls:
  *                          type: object
  *                          properties:
- *                              id_typeshop_profile:
+ *                              id_typeshop_urls:
  *                                  type: number
  *                              store_id:
  *                                  type: number
@@ -144,14 +144,14 @@ typeshopProfileRouter.get("/get-typeshop-profile/:id", verify_JWT, isAdmin, getT
  *       500:
  *         description: Error interno del servidor
  */
-typeshopProfileRouter.post("/create-typeshop-profile", verify_JWT, isAdmin, createTypeshopProfileController);
+typeshopUrlsRouter.post("/create-typeshop-urls", verify_JWT, isAdmin, createTypeshopUrlsController);
 
 /**
  * @openapi
- * /typeshop-profile/update-typeshop-profile/{id}:
+ * /typeshop-urls/update-typeshop-urls/{id}:
  *   put:
- *     tags: [Typeshop Profile]
- *     summary: Actualizar un perfil de tipo de tienda
+ *     tags: [Typeshop Urls]
+ *     summary: Actualizar una URL de tipo de tienda
  *     security:
  *       - x-access-token: []
  *     parameters:
@@ -160,7 +160,7 @@ typeshopProfileRouter.post("/create-typeshop-profile", verify_JWT, isAdmin, crea
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID del perfil
+ *         description: ID de la URL
  *     requestBody:
  *       required: true
  *       content:
@@ -176,7 +176,7 @@ typeshopProfileRouter.post("/create-typeshop-profile", verify_JWT, isAdmin, crea
  *                       type: string
  *     responses:
  *       200:
- *         description: Perfil actualizado exitosamente
+ *         description: URL actualizada exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -184,10 +184,10 @@ typeshopProfileRouter.post("/create-typeshop-profile", verify_JWT, isAdmin, crea
  *                 properties:
  *                      message:
  *                          type: string
- *                      typeshopProfile:
+ *                      typeshopUrls:
  *                          type: object
  *                          properties:
- *                              id_typeshop_profile:
+ *                              id_typeshop_urls:
  *                                  type: number
  *                              store_id:
  *                                  type: number
@@ -198,18 +198,18 @@ typeshopProfileRouter.post("/create-typeshop-profile", verify_JWT, isAdmin, crea
  *       400:
  *         description: Datos de entrada inválidos
  *       404:
- *         description: Perfil, Store o Typeshop no encontrado
+ *         description: URL, Store o Typeshop no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-typeshopProfileRouter.put("/update-typeshop-profile/:id", verify_JWT, isAdmin, updateTypeshopProfileController);
+typeshopUrlsRouter.put("/update-typeshop-urls/:id", verify_JWT, isAdmin, updateTypeshopUrlsController);
 
 /**
  * @openapi
- * /typeshop-profile/delete-typeshop-profile/{id}:
+ * /typeshop-urls/delete-typeshop-urls/{id}:
  *   delete:
- *     tags: [Typeshop Profile]
- *     summary: Eliminar un perfil de tipo de tienda
+ *     tags: [Typeshop Urls]
+ *     summary: Eliminar una URL de tipo de tienda
  *     security:
  *       - x-access-token: []
  *     parameters:
@@ -218,10 +218,10 @@ typeshopProfileRouter.put("/update-typeshop-profile/:id", verify_JWT, isAdmin, u
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID del perfil
+ *         description: ID de la URL
  *     responses:
  *       200:
- *         description: Perfil eliminado exitosamente
+ *         description: URL eliminada exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -232,10 +232,10 @@ typeshopProfileRouter.put("/update-typeshop-profile/:id", verify_JWT, isAdmin, u
  *       400:
  *         description: ID inválido
  *       404:
- *         description: Perfil no encontrado
+ *         description: URL no encontrada
  *       500:
  *         description: Error interno del servidor
  */
-typeshopProfileRouter.delete("/delete-typeshop-profile/:id", verify_JWT, isAdmin, deleteTypeshopProfileController);
+typeshopUrlsRouter.delete("/delete-typeshop-urls/:id", verify_JWT, isAdmin, deleteTypeshopUrlsController);
 
-export { typeshopProfileRouter };
+export { typeshopUrlsRouter };
