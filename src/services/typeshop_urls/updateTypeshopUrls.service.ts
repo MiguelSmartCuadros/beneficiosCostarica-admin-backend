@@ -11,7 +11,7 @@ export const updateTypeshopUrlsService: (req: Request, res: Response) => Promise
     try {
         const { id } = req.params;
         const id_typeshop_urls = Number(id);
-        const { store_id, typeshop_id, url } = req.body;
+        const { store_id, typeshop_id, url_store } = req.body;
 
         if (!id_typeshop_urls || isNaN(id_typeshop_urls)) {
             return res.status(400).json({ error: true, message: "El ID debe ser un número válido", statusCode: 400 });
@@ -40,7 +40,7 @@ export const updateTypeshopUrlsService: (req: Request, res: Response) => Promise
         await typeshopUrls.update({
             store_id: store_id || typeshopUrls.getDataValue("store_id"),
             typeshop_id: typeshop_id || typeshopUrls.getDataValue("typeshop_id"),
-            url: url || typeshopUrls.getDataValue("url"),
+            url_store: url_store || typeshopUrls.getDataValue("url_store"),
         });
 
         return res.json({
@@ -49,7 +49,7 @@ export const updateTypeshopUrlsService: (req: Request, res: Response) => Promise
                 id_typeshop_urls: typeshopUrls.getDataValue("id_typeshop_urls"),
                 store_id: typeshopUrls.getDataValue("store_id"),
                 typeshop_id: typeshopUrls.getDataValue("typeshop_id"),
-                url: typeshopUrls.getDataValue("url"),
+                url_store: typeshopUrls.getDataValue("url_store"),
             },
         });
     } catch (error: any) {

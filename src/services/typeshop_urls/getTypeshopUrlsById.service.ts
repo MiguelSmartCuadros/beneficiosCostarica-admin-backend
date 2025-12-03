@@ -37,7 +37,7 @@ export const getTypeshopUrlsByIdService: (req: Request, res: Response) => Promis
                 id_typeshop_urls: typeshopUrls.getDataValue("id_typeshop_urls"),
                 store_id: typeshopUrls.getDataValue("store_id"),
                 typeshop_id: typeshopUrls.getDataValue("typeshop_id"),
-                url: typeshopUrls.getDataValue("url"),
+                url_store: typeshopUrls.getDataValue("url_store"),
             },
         });
     } catch (error: any) {

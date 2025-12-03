@@ -4,6 +4,9 @@ import { getAllStoresController } from "../controllers/stores/getAllStores.contr
 import { getStoreByIdController } from "../controllers/stores/getStoreById.controller";
 import { updateStoreController } from "../controllers/stores/updateStore.controller";
 import { deleteStoreController } from "../controllers/stores/deleteStore.controller";
+import { uploadStoreImagesController } from "../controllers/stores/uploadStoreImages.controller";
+import { getStoreImagesUrlsController } from "../controllers/stores/getStoreImagesUrls.controller";
+import { getStoreImages } from "../middlewares/uploadImage.middleware";
 import { verify_JWT } from "../middlewares/verifyToken";
 import { isAdmin } from "../middlewares/isAdmin";
 
@@ -85,9 +88,35 @@ storesRouter.get("/get-store/:id", getStoreByIdController);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/stores'
+ *             type: object
+ *             properties:
+ *               store_name:
+ *                 type: string
+ *               category_id:
+ *                 type: integer
+ *               shop_type_id:
+ *                 type: integer
+ *               province_id:
+ *                 type: integer
+ *               start_date:
+ *                 type: string
+ *                 format: date
+ *               end_date:
+ *                 type: string
+ *                 format: date
+ *               id_user_responsible:
+ *                 type: integer
+ *               store_img_card:
+ *                 type: string
+ *                 format: binary
+ *               store_img_highlight:
+ *                 type: string
+ *                 format: binary
+ *               store_img_banner:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: Tienda creada exitosamente
@@ -105,7 +134,7 @@ storesRouter.get("/get-store/:id", getStoreByIdController);
  *       500:
  *         description: Error interno del servidor
  */
-storesRouter.post("/create-store", verify_JWT, isAdmin, createStoreController);
+storesRouter.post("/create-store", verify_JWT, isAdmin, getStoreImages, createStoreController);
 
 /**
  * @openapi
@@ -182,5 +211,104 @@ storesRouter.put("/update-store/:id", verify_JWT, isAdmin, updateStoreController
  *         description: Error interno del servidor
  */
 storesRouter.delete("/delete-store/:id", verify_JWT, isAdmin, deleteStoreController);
+
+/**
+ * @openapi
+ * /stores/upload-images/{id}:
+ *   post:
+ *     summary: Subir imágenes para una tienda
+ *     tags: [Stores]
+ *     security:
+ *       - x-access-token: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de la tienda
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               store_img_card:
+ *                 type: string
+ *                 format: binary
+ *               store_img_highlight:
+ *                 type: string
+ *                 format: binary
+ *               store_img_banner:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Imágenes subidas exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/stores'
+ *       400:
+ *         description: Error en la solicitud (sin archivos o archivos inválidos)
+ *       404:
+ *         description: Tienda no encontrada
+ *       500:
+ *         description: Error interno del servidor
+ */
+storesRouter.post("/upload-images/:id", verify_JWT, isAdmin, getStoreImages, uploadStoreImagesController);
+
+/**
+ * @openapi
+ * /stores/get-images-urls/{id}:
+ *   get:
+ *     summary: Obtener URLs firmadas de las imágenes de una tienda
+ *     tags: [Stores]
+ *     security:
+ *       - x-access-token: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de la tienda
+ *     responses:
+ *       200:
+ *         description: URLs de imágenes obtenidas exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     store_img_card:
+ *                       type: string
+ *                       description: URL firmada de la imagen card
+ *                     store_img_highlight:
+ *                       type: string
+ *                       description: URL firmada de la imagen highlight
+ *                     store_img_banner:
+ *                       type: string
+ *                       description: URL firmada de la imagen banner
+ *       404:
+ *         description: Tienda no encontrada
+ *       500:
+ *         description: Error interno del servidor
+ */
+storesRouter.get("/get-images-urls/:id", getStoreImagesUrlsController);
 
 export { storesRouter };

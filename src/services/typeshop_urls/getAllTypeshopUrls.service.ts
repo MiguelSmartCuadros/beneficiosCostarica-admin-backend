@@ -15,7 +15,7 @@ export const getAllTypeshopUrlsService: (req: Request, res: Response) => Promise
             id_typeshop_urls: url.getDataValue("id_typeshop_urls"),
             store_id: url.getDataValue("store_id"),
             typeshop_id: url.getDataValue("typeshop_id"),
-            url: url.getDataValue("url"),
+            url_store: url.getDataValue("url_store"),
         }));
 
         return res.json({

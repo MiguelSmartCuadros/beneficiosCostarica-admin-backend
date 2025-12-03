@@ -44,7 +44,7 @@ export const createTypeshopUrlsService: (req: Request, res: Response) => Promise
                 id_typeshop_urls: typeshopUrls.getDataValue("id_typeshop_urls"),
                 store_id: typeshopUrls.getDataValue("store_id"),
                 typeshop_id: typeshopUrls.getDataValue("typeshop_id"),
-                url: typeshopUrls.getDataValue("url_store"),
+                url_store: typeshopUrls.getDataValue("url_store"),
             },
         });
     } catch (error: any) {
